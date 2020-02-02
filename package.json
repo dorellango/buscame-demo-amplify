@@ -1,7 +1,7 @@
 {
   "name": "buscame-demo-amplify",
   "version": "1.0.0",
-  "description": "A buss adm system - demo",
+  "description": "A bus adm system - demo",
   "author": "Diego Orellana",
   "private": true,
   "scripts": {

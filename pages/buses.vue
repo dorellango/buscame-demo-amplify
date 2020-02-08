@@ -10,7 +10,9 @@
       </div>
       <button class="btn-indigo">Ingresar</button>
     </div>
-    <bus-card v-for="bus in buses" :key="bus.id" :bus="bus"></bus-card>
+    <div class="flex flex-wrap">
+      <bus-card v-for="bus in buses" :key="bus.id" :bus="bus"></bus-card>
+    </div>
   </div>
 </template>
 
@@ -27,14 +29,29 @@ export default {
           id_chofer: 1
         },
         {
+          patente: "HH-7682",
+          marca: "Ford",
+          id_chofer: 1
+        },
+        {
           patente: "JK-6723",
           marca: "Mercedez Benz",
+          id_chofer: 2
+        },
+        {
+          patente: "WF-7682",
+          marca: "Renault",
+          id_chofer: 1
+        },
+        {
+          patente: "RT-6723",
+          marca: "Honda",
           id_chofer: 2
         }
       ]
     };
   },
-  components: { ChoferCard }
+  components: { BusCard }
 };
 </script>
 

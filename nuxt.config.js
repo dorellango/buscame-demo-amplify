@@ -31,6 +31,7 @@ export default {
     '~/plugins/modal',
     '~/plugins/rut',
     '~/plugins/flash',
+    '~/plugins/global',
   ],
   /*
   ** Nuxt.js dev-modules

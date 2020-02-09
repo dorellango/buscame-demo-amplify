@@ -1,6 +1,8 @@
 <template>
   <div class="container mx-auto">
-    <div class="flex items-center justify-between border-b border-dashed border-gray-300 py-4 mb-8">
+    <div
+      class="flex items-center justify-between border-b border-dashed border-gray-300 py-4 mb-8"
+    >
       <div class="flex items-center">
         <h1 class="text-2xl text-gray-800 mr-2">Choferes</h1>
         <p
@@ -8,13 +10,19 @@
           v-text="choferes.length"
         ></p>
       </div>
-      <button @click="$modal.show('chofer-add')" class="btn-indigo">Ingresar</button>
+      <button @click="$modal.show('chofer-add')" class="btn-indigo">
+        Ingresar
+      </button>
     </div>
     <!-- Choferes -->
     <transition-group name="fade" tag="div">
-      <chofer-card v-for="chofer in choferes" :key="chofer.id" :chofer="chofer" @destroy="destroy"></chofer-card>
+      <chofer-card
+        v-for="chofer in choferes"
+        :key="chofer.id"
+        :chofer="chofer"
+        @destroy="destroy"
+      ></chofer-card>
     </transition-group>
-
     <!-- Add Chofer -->
     <modal name="chofer-add" height="auto" :scrollable="true">
       <div class="p-4 text-center bg-gray-200">
@@ -53,7 +61,9 @@
         </div>
         <div class="p-4 bg-gray-200 flex">
           <button type="submit" class="btn-indigo-o">Guardar</button>
-          <button class="btn-default" @click="$modal.hide('chofer-add')">Cerrar</button>
+          <button class="btn-default" @click="$modal.hide('chofer-add')">
+            Cerrar
+          </button>
         </div>
       </form>
     </modal>
@@ -63,8 +73,6 @@
 
 <script>
 import ChoferCard from "~/components/ChoferCard";
-import InputForm from "~/components/InputForm";
-import InputRut from "~/components/InputRut";
 
 export default {
   data() {
@@ -77,14 +85,16 @@ export default {
     };
   },
   async asyncData({ $axios }) {
-    const response = await $axios.$post("/chofer/all", {
+    const buses = await $axios.$post("/bus/all", {
+      user: "diego_orellana",
+      pass: "destacameorellana"
+    });
+    const choferes = await $axios.$post("/chofer/all", {
       user: "diego_orellana",
       pass: "destacameorellana"
     });
 
-    return {
-      choferes: response
-    };
+    return { choferes, buses };
   },
   methods: {
     async updateList() {
@@ -114,16 +124,25 @@ export default {
       this.form.apellido = "";
       this.form.rut = "";
     },
-    async destroy(id) {
-      await this.$axios.delete(`/chofer/${id}`, {
-        data: {
-          user: "diego_orellana",
-          pass: "destacameorellana"
-        }
-      });
-
-      this.removeChofer(id);
-      this.$vToastify.info("Chofer eliminado exitósamente 😢", "¡Hecho!");
+    async destroy({ id }) {
+      if (this.choferes.some(c => c.id === id)) {
+        return this.$vToastify.error(
+          "No puedes eliminar choferes con buses asignados",
+          "Nope!"
+        );
+      }
+      try {
+        await this.$axios.delete(`/chofer/${id}`, {
+          data: {
+            user: "diego_orellana",
+            pass: "destacameorellana"
+          }
+        });
+        this.removeChofer(id);
+        this.$vToastify.info("Chofer eliminado exitósamente 😢", "¡Hecho!");
+      } catch (error) {
+        console.log(error);
+      }
     },
     removeChofer(id) {
       const { choferes } = this;
@@ -133,7 +152,7 @@ export default {
       );
     }
   },
-  components: { ChoferCard, InputForm, InputRut }
+  components: { ChoferCard }
 };
 </script>
 

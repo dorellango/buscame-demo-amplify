@@ -1,6 +1,6 @@
 <template>
   <div class="bg-indigo-800 text-blue-100 shadow-md border-b border-indigo-900">
-    <div class="container mx-auto">
+    <div class="container mx-auto px-4">
       <div class="flex items-center py-4 h-16">
         <div class="mr-auto flex items-center">
           <svg

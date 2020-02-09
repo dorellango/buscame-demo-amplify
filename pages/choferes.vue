@@ -8,35 +8,132 @@
           v-text="choferes.length"
         ></p>
       </div>
-      <button class="btn-indigo">Ingresar</button>
+      <button @click="$modal.show('chofer-add')" class="btn-indigo">Ingresar</button>
     </div>
-    <chofer-card v-for="chofer in choferes" :key="chofer.id" :chofer="chofer"></chofer-card>
+    <!-- Choferes -->
+    <transition-group name="fade" tag="div">
+      <chofer-card v-for="chofer in choferes" :key="chofer.id" :chofer="chofer" @destroy="destroy"></chofer-card>
+    </transition-group>
+
+    <!-- Add Chofer -->
+    <modal name="chofer-add" height="auto" :scrollable="true">
+      <div class="p-4 text-center bg-gray-200">
+        <h1 class="text-lg font-bold text-gray-700">Ingreso Chofer</h1>
+      </div>
+      <form @submit.prevent="add">
+        <!-- @keydown.enter="add" -->
+        <div class="px-4 py-6">
+          <input-form
+            v-model="form.nombre"
+            class="mb-2"
+            label="nombre"
+            name="text"
+            type="text"
+            placeholder="Jhon"
+            :required="true"
+          ></input-form>
+          <input-form
+            v-model="form.apellido"
+            class="mb-2"
+            label="apellido"
+            name="apellido"
+            type="text"
+            placeholder="Doe"
+            :required="true"
+          ></input-form>
+          <input-rut
+            v-model="form.rut"
+            class="mb-2 font-mono"
+            label="rut"
+            name="rut"
+            type="text"
+            placeholder="11.111.111-1"
+            :required="true"
+          ></input-rut>
+        </div>
+        <div class="p-4 bg-gray-200 flex">
+          <button type="submit" class="btn-indigo-o">Guardar</button>
+          <button class="btn-default" @click="$modal.hide('chofer-add')">Cerrar</button>
+        </div>
+      </form>
+    </modal>
+    <!-- Add Chofer -->
   </div>
 </template>
 
 <script>
 import ChoferCard from "~/components/ChoferCard";
+import InputForm from "~/components/InputForm";
+import InputRut from "~/components/InputRut";
 
 export default {
   data() {
     return {
-      choferes: [
-        {
-          apellido: "juan",
-          id: 1,
-          nombre: "felipe",
-          rut: "15291252-K"
-        },
-        {
-          apellido: "antonia",
-          id: 2,
-          nombre: "maria",
-          rut: "1292252-3"
-        }
-      ]
+      form: {
+        nombre: "",
+        apellido: "",
+        rut: ""
+      }
     };
   },
-  components: { ChoferCard }
+  async asyncData({ $axios }) {
+    const response = await $axios.$post("/chofer/all", {
+      user: "diego_orellana",
+      pass: "destacameorellana"
+    });
+
+    return {
+      choferes: response
+    };
+  },
+  methods: {
+    async updateList() {
+      const { data } = await this.$axios.post("/chofer/all", {
+        user: "diego_orellana",
+        pass: "destacameorellana"
+      });
+      this.choferes = data;
+    },
+    async add() {
+      try {
+        await this.$axios.post("/chofer", {
+          user: "diego_orellana",
+          pass: "destacameorellana",
+          ...this.form
+        });
+        this.reset();
+        this.updateList();
+        this.$vToastify.success("Chofer agregado exitósamente 😄", "¡Hecho!");
+        this.$modal.hide("chofer-add");
+      } catch (error) {
+        console.error("Something goes wrong");
+      }
+    },
+    reset() {
+      this.form.nombre = "";
+      this.form.apellido = "";
+      this.form.rut = "";
+    },
+    async destroy(id) {
+      await this.$axios.delete(`/chofer/${id}`, {
+        data: {
+          user: "diego_orellana",
+          pass: "destacameorellana"
+        }
+      });
+
+      this.removeChofer(id);
+      this.$vToastify.info("Chofer eliminado exitósamente 😢", "¡Hecho!");
+    },
+    removeChofer(id) {
+      const { choferes } = this;
+      choferes.splice(
+        choferes.findIndex(c => c.id === id),
+        1
+      );
+    }
+  },
+  components: { ChoferCard, InputForm, InputRut }
 };
 </script>
 

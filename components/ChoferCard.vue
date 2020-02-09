@@ -15,10 +15,25 @@
       />
     </svg>
 
-    <div class="border-l pl-4 border-gray-200">
+    <div class="border-l pl-4 border-gray-200 flex-1">
       <p class="text-lg mb-1 text-indigo-800" v-text="`${chofer.nombre} ${chofer.apellido}`"></p>
-      <p class="font-mono text-xs text-gray-600 tracking-wider" v-text="chofer.rut"></p>
+      <p class="font-mono text-xs text-gray-600 tracking-wider" v-rut="chofer.rut"></p>
     </div>
+    <button
+      class="text-gray-400 hover:text-gray-700 focus:outline-none"
+      @click="$emit('destroy', chofer.id)"
+    >
+      <svg
+        class="fill-current"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+      >
+        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+        <path d="M0 0h24v24H0z" fill="none" />
+      </svg>
+    </button>
   </div>
 </template>
 

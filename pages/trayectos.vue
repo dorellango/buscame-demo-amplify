@@ -22,7 +22,7 @@
         :trayecto="trayecto"
         @destroy="destroy"
         @schedule="$refs.modalHorarios.show(trayecto)"
-        :deletable="false"
+        :deletable="true"
       ></trayecto-card>
     </transition-group>
 
@@ -93,22 +93,17 @@ export default {
     };
   },
   async asyncData({ $axios }) {
-    const trayectos = await $axios.$post("/trayecto/all", {
-      user: "diego_orellana",
-      pass: "destacameorellana"
-    });
-
-    return { trayectos };
+    try {
+      const trayectos = await $axios.$post("/trayecto/all");
+      return { trayectos };
+    } catch (error) {
+      console.log(error);
+    }
   },
   methods: {
     async destroy({ id }) {
       try {
-        await this.$axios.delete(`/trayecto/${id}`, {
-          data: {
-            user: "diego_orellana",
-            pass: "destacameorellana"
-          }
-        });
+        await this.$axios.delete(`/trayecto/${id}`);
         this.removeTrayecto(id);
         this.$vToastify.info("Trayecto eliminado exitósamente 😢", "¡Hecho!");
       } catch (error) {
@@ -117,11 +112,7 @@ export default {
     },
     async add() {
       try {
-        await this.$axios.post("/trayecto", {
-          user: "diego_orellana",
-          pass: "destacameorellana",
-          ...this.form
-        });
+        await this.$axios.post("/trayecto", this.form);
         this.reset();
         this.updateList();
         this.$vToastify.success("Trayecto agregado exitósamente 😄", "¡Hecho!");
@@ -136,10 +127,7 @@ export default {
       this.form.terminal = "";
     },
     async updateList() {
-      const { data } = await this.$axios.post("/trayecto/all", {
-        user: "diego_orellana",
-        pass: "destacameorellana"
-      });
+      const { data } = await this.$axios.post("/trayecto/all");
       this.trayectos = data;
     },
     removeTrayecto(id) {

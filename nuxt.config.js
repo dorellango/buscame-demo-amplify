@@ -32,6 +32,7 @@ export default {
     '~/plugins/rut',
     '~/plugins/flash',
     '~/plugins/global',
+    '~/plugins/axios',
   ],
   /*
   ** Nuxt.js dev-modules
@@ -52,11 +53,7 @@ export default {
    * Axios config
    */
   axios: {
-    baseURL: process.env.API_BASE_URL || 'http://ec2-18-228-17-151.sa-east-1.compute.amazonaws.com',
-    data: {
-      "user": "diego_orellana",
-      "pass": "destacameorellana"
-    }
+    baseURL: process.env.API_BASE_URL || 'http://ec2-18-228-17-151.sa-east-1.compute.amazonaws.com'
   },
   /*
   ** Build configuration

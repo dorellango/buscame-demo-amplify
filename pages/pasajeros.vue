@@ -88,21 +88,14 @@ export default {
     };
   },
   async asyncData({ $axios }) {
-    const pasajeros = await $axios.$post("/pasajero/all", {
-      user: "diego_orellana",
-      pass: "destacameorellana"
-    });
+    const pasajeros = await $axios.$post("/pasajero/all");
 
     return { pasajeros };
   },
   methods: {
     async add() {
       try {
-        await this.$axios.post("/pasajero", {
-          user: "diego_orellana",
-          pass: "destacameorellana",
-          ...this.form
-        });
+        await this.$axios.post("/pasajero", this.form);
         this.reset();
         this.updateList();
         this.$vToastify.success("Pasajero agregado exitósamente 😄", "¡Hecho!");
@@ -117,26 +110,12 @@ export default {
       this.form.rut = "";
     },
     async updateList() {
-      const { data } = await this.$axios.post("/pasajero/all", {
-        user: "diego_orellana",
-        pass: "destacameorellana"
-      });
+      const { data } = await this.$axios.post("/pasajero/all");
       this.pasajeros = data;
     },
     async destroy({ id }) {
-      // if (this.choferes.some(c => c.id === id)) {
-      //   return this.$vToastify.error(
-      //     "No puedes eliminar choferes con buses asignados",
-      //     "Nope!"
-      //   );
-      // }
       try {
-        await this.$axios.delete(`/pasajero/${id}`, {
-          data: {
-            user: "diego_orellana",
-            pass: "destacameorellana"
-          }
-        });
+        await this.$axios.delete(`/pasajero/${id}`);
         this.removePasajero(id);
         this.$vToastify.info("Pasajero eliminado exitósamente 😢", "¡Hecho!");
       } catch (error) {

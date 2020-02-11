@@ -130,11 +130,7 @@ export default {
         );
       }
       try {
-        const { data } = await this.$axios.post("/horario", {
-          user: "diego_orellana",
-          pass: "destacameorellana",
-          ...this.form
-        });
+        const { data } = await this.$axios.post("/horario");
 
         this.fetchHorarios();
         this.$vToastify.success("Trayecto agregado exitósamente 😢", "¡Hecho!");
@@ -144,12 +140,7 @@ export default {
     },
     async destroy({ id }) {
       try {
-        await this.$axios.delete(`/horario/${id}`, {
-          data: {
-            user: "diego_orellana",
-            pass: "destacameorellana"
-          }
-        });
+        await this.$axios.delete(`/horario/${id}`);
         this.removeHorario(id);
         this.$vToastify.info("Trayecto eliminado exitósamente 😢", "¡Hecho!");
       } catch (error) {
@@ -172,17 +163,11 @@ export default {
       this.$modal.show("horarios");
     },
     async fetchBuses() {
-      const { data: buses } = await this.$axios.post("/bus/all", {
-        user: "diego_orellana",
-        pass: "destacameorellana"
-      });
+      const { data: buses } = await this.$axios.post("/bus/all");
       this.buses = buses;
     },
     async fetchHorarios() {
-      const { data: horarios } = await this.$axios.post("/horario/all", {
-        user: "diego_orellana",
-        pass: "destacameorellana"
-      });
+      const { data: horarios } = await this.$axios.post("/horario/all");
 
       this.horarios = horarios;
 

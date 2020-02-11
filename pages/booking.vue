@@ -152,20 +152,9 @@ export default {
   },
 
   async asyncData({ $axios }) {
-    const trayectos = await $axios.$post("/trayecto/all", {
-      user: "diego_orellana",
-      pass: "destacameorellana"
-    });
-
-    const asientos = await $axios.$post("/asiento/all", {
-      user: "diego_orellana",
-      pass: "destacameorellana"
-    });
-
-    const pasajeros = await $axios.$post("/pasajero/all", {
-      user: "diego_orellana",
-      pass: "destacameorellana"
-    });
+    const trayectos = await $axios.$post("/trayecto/all");
+    const asientos = await $axios.$post("/asiento/all");
+    const pasajeros = await $axios.$post("/pasajero/all");
 
     return { trayectos, asientos, pasajeros };
   },
@@ -181,11 +170,7 @@ export default {
     },
     async book() {
       try {
-        const { data } = await this.$axios.post("/asiento", {
-          user: "diego_orellana",
-          pass: "destacameorellana",
-          ...this.form
-        });
+        const { data } = await this.$axios.post("/asiento");
 
         this.reset();
 
@@ -203,24 +188,15 @@ export default {
       this.horarios = [];
     },
     async fetchBuses() {
-      const { data: buses } = await this.$axios.post("/bus/all", {
-        user: "diego_orellana",
-        pass: "destacameorellana"
-      });
+      const { data: buses } = await this.$axios.post("/bus/all");
       this.buses = buses;
     },
     async fetchAsientos() {
-      const { data: asientos } = await this.$axios.post("/asiento/all", {
-        user: "diego_orellana",
-        pass: "destacameorellana"
-      });
+      const { data: asientos } = await this.$axios.post("/asiento/all");
       this.asientos = asientos;
     },
     async fetchHorarios() {
-      const { data: horarios } = await this.$axios.post("/horario/all", {
-        user: "diego_orellana",
-        pass: "destacameorellana"
-      });
+      const { data: horarios } = await this.$axios.post("/horario/all");
 
       this.horarios = horarios.filter(
         h => h.id_trayecto === this.form.id_trayecto

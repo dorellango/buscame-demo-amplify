@@ -10,13 +10,6 @@
           v-text="asientos.length"
         ></p>
       </div>
-      <!-- <button
-        type="button"
-        @click="$modal.show('pasajero-add')"
-        class="btn-indigo"
-      >
-        Ingresar
-      </button> -->
     </div>
     <transition-group name="fade" tag="div">
       <asiento-card
@@ -45,53 +38,15 @@ export default {
     };
   },
   async asyncData({ $axios }) {
-    const asientos = await $axios.$post("/asiento/all", {
-      user: "diego_orellana",
-      pass: "destacameorellana"
-    });
-    const buses = await $axios.$post("/bus/all", {
-      user: "diego_orellana",
-      pass: "destacameorellana"
-    });
+    const asientos = await $axios.$post("/asiento/all");
+    const buses = await $axios.$post("/bus/all");
 
     return { asientos, buses };
   },
   methods: {
-    // async add() {
-    //   try {
-    //     await this.$axios.post("/pasajero", {
-    //       user: "diego_orellana",
-    //       pass: "destacameorellana",
-    //       ...this.form
-    //     });
-    //     this.reset();
-    //     this.updateList();
-    //     this.$vToastify.success("Pasajero agregado exitósamente 😄", "¡Hecho!");
-    //     this.$modal.hide("pasajero-add");
-    //   } catch (error) {
-    //     console.error("Something goes wrong");
-    //   }
-    // },
-    // reset() {
-    //   this.form.nombre = "";
-    //   this.form.apellido = "";
-    //   this.form.rut = "";
-    // },
-    // async updateList() {
-    //   const { data } = await this.$axios.post("/pasajero/all", {
-    //     user: "diego_orellana",
-    //     pass: "destacameorellana"
-    //   });
-    //   this.pasajeros = data;
-    // },
     async destroy({ id }) {
       try {
-        await this.$axios.delete(`/asiento/${id}`, {
-          data: {
-            user: "diego_orellana",
-            pass: "destacameorellana"
-          }
-        });
+        await this.$axios.delete(`/asiento/${id}`);
         this.removeAsiento(id);
         this.$vToastify.info(
           "Asiento/reservación eliminado exitósamente 😢",

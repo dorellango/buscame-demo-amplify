@@ -85,32 +85,19 @@ export default {
     };
   },
   async asyncData({ $axios }) {
-    const buses = await $axios.$post("/bus/all", {
-      user: "diego_orellana",
-      pass: "destacameorellana"
-    });
-    const choferes = await $axios.$post("/chofer/all", {
-      user: "diego_orellana",
-      pass: "destacameorellana"
-    });
+    const buses = await $axios.$post("/bus/all");
+    const choferes = await $axios.$post("/chofer/all");
 
     return { choferes, buses };
   },
   methods: {
     async updateList() {
-      const { data } = await this.$axios.post("/chofer/all", {
-        user: "diego_orellana",
-        pass: "destacameorellana"
-      });
+      const { data } = await this.$axios.post("/chofer/all");
       this.choferes = data;
     },
     async add() {
       try {
-        await this.$axios.post("/chofer", {
-          user: "diego_orellana",
-          pass: "destacameorellana",
-          ...this.form
-        });
+        await this.$axios.post("/chofer", this.form);
         this.reset();
         this.updateList();
         this.$vToastify.success("Chofer agregado exitósamente 😄", "¡Hecho!");
@@ -132,12 +119,7 @@ export default {
         );
       }
       try {
-        await this.$axios.delete(`/chofer/${id}`, {
-          data: {
-            user: "diego_orellana",
-            pass: "destacameorellana"
-          }
-        });
+        await this.$axios.delete(`/chofer/${id}`);
         this.removeChofer(id);
         this.$vToastify.info("Chofer eliminado exitósamente 😢", "¡Hecho!");
       } catch (error) {

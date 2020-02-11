@@ -13,6 +13,10 @@
       <button @click="$modal.show('trayecto-add')" class="btn-indigo">
         Ingresar
       </button>
+      <modal-add-trayecto
+        ref="modalAddTrayecto"
+        @added="updateList"
+      ></modal-add-trayecto>
     </div>
     <!-- Trayectos -->
     <transition-group name="fade" tag="div">
@@ -25,54 +29,6 @@
         :deletable="true"
       ></trayecto-card>
     </transition-group>
-
-    <!-- Add Trayecto -->
-    <modal name="trayecto-add" height="auto" :scrollable="true">
-      <div class="p-4 text-center bg-gray-200">
-        <h1 class="text-lg font-bold text-gray-700">Ingreso Chofer</h1>
-      </div>
-      <form @submit.prevent="add">
-        <div class="px-4 py-6">
-          <input-form
-            v-model="form.ida"
-            class="mb-2"
-            label="ida"
-            name="ida"
-            type="text"
-            placeholder="Santiago"
-            :required="true"
-          ></input-form>
-          <input-form
-            v-model="form.vuelta"
-            class="mb-2"
-            label="vuelta"
-            name="vuelta"
-            type="text"
-            placeholder="Valparaiso"
-            :required="true"
-          ></input-form>
-          <input-form
-            v-model="form.terminal"
-            class="mb-2"
-            label="terminal"
-            name="terminal"
-            type="text"
-            placeholder="Colon"
-            :required="true"
-          ></input-form>
-        </div>
-        <div class="p-4 bg-gray-200 flex">
-          <button type="submit" class="btn-indigo-o">Guardar</button>
-          <button
-            type="button"
-            class="btn-default"
-            @click="$modal.hide('trayecto-add')"
-          >
-            Cerrar
-          </button>
-        </div>
-      </form>
-    </modal>
     <modal-horarios ref="modalHorarios"></modal-horarios>
   </div>
 </template>
@@ -80,16 +36,12 @@
 <script>
 import TrayectoCard from "~/components/TrayectoCard";
 import ModalHorarios from "~/components/ModalHorarios";
+import ModalAddTrayecto from "~/components/ModalAddTrayecto";
 
 export default {
   data() {
     return {
-      horarios: [],
-      form: {
-        ida: "",
-        vuelta: "",
-        terminal: ""
-      }
+      horarios: []
     };
   },
   async asyncData({ $axios }) {
@@ -110,22 +62,6 @@ export default {
         console.log(error);
       }
     },
-    async add() {
-      try {
-        await this.$axios.post("/trayecto", this.form);
-        this.reset();
-        this.updateList();
-        this.$vToastify.success("Trayecto agregado exitósamente 😄", "¡Hecho!");
-        this.$modal.hide("trayecto-add");
-      } catch (error) {
-        console.error("Something goes wrong");
-      }
-    },
-    reset() {
-      this.form.ida = "";
-      this.form.vuelta = "";
-      this.form.terminal = "";
-    },
     async updateList() {
       const { data } = await this.$axios.post("/trayecto/all");
       this.trayectos = data;
@@ -138,7 +74,7 @@ export default {
       );
     }
   },
-  components: { TrayectoCard, ModalHorarios }
+  components: { TrayectoCard, ModalHorarios, ModalAddTrayecto }
 };
 </script>
 

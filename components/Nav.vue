@@ -19,10 +19,11 @@
             bus
             <span class="font-bold -ml-1">.CO</span>
           </p>
-          <!-- TODO -->
         </div>
         <!-- Links -->
         <div class="ml-2 flex items-center">
+          <!-- Mobile -->
+          <nav-mobile></nav-mobile>
           <div class="items-center mr-2 hidden md:flex">
             <nuxt-link
               class="mx-2 tracking-wider hover:text-indigo-400"
@@ -78,7 +79,11 @@
 </template>
 
 <script>
-export default {};
+import NavMobile from "~/components/NavMobile";
+
+export default {
+  components: { NavMobile }
+};
 </script>
 
 <style>

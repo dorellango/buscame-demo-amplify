@@ -13,6 +13,10 @@
       <button @click="$modal.show('chofer-add')" class="btn-indigo">
         Ingresar
       </button>
+      <modal-add-chofer
+        ref="modalAddChofer"
+        @added="updateList"
+      ></modal-add-chofer>
     </div>
     <!-- Choferes -->
     <transition-group name="fade" tag="div">
@@ -23,93 +27,32 @@
         @destroy="destroy"
       ></chofer-card>
     </transition-group>
-    <!-- Add Chofer -->
-    <modal name="chofer-add" height="auto" :scrollable="true">
-      <div class="p-4 text-center bg-gray-200">
-        <h1 class="text-lg font-bold text-gray-700">Ingreso Chofer</h1>
-      </div>
-      <form @submit.prevent="add">
-        <!-- @keydown.enter="add" -->
-        <div class="px-4 py-6">
-          <input-form
-            v-model="form.nombre"
-            class="mb-2"
-            label="nombre"
-            name="text"
-            type="text"
-            placeholder="Jhon"
-            :required="true"
-          ></input-form>
-          <input-form
-            v-model="form.apellido"
-            class="mb-2"
-            label="apellido"
-            name="apellido"
-            type="text"
-            placeholder="Doe"
-            :required="true"
-          ></input-form>
-          <input-rut
-            v-model="form.rut"
-            class="mb-2 font-mono"
-            label="rut"
-            name="rut"
-            type="text"
-            placeholder="11.111.111-1"
-            :required="true"
-          ></input-rut>
-        </div>
-        <div class="p-4 bg-gray-200 flex">
-          <button type="submit" class="btn-indigo-o">Guardar</button>
-          <button class="btn-default" @click="$modal.hide('chofer-add')">
-            Cerrar
-          </button>
-        </div>
-      </form>
-    </modal>
-    <!-- Add Chofer -->
   </div>
 </template>
 
 <script>
 import ChoferCard from "~/components/ChoferCard";
+import ModalAddChofer from "~/components/ModalAddChofer";
 
 export default {
-  data() {
-    return {
-      form: {
-        nombre: "",
-        apellido: "",
-        rut: ""
-      }
-    };
-  },
   async asyncData({ $axios }) {
-    const buses = await $axios.$post("/bus/all");
-    const choferes = await $axios.$post("/chofer/all");
+    try {
+      const buses = await $axios.$post("/bus/all");
+      const choferes = await $axios.$post("/chofer/all");
 
-    return { choferes, buses };
+      return { choferes, buses };
+    } catch (error) {
+      console.log(error);
+    }
   },
   methods: {
     async updateList() {
-      const { data } = await this.$axios.post("/chofer/all");
-      this.choferes = data;
-    },
-    async add() {
       try {
-        await this.$axios.post("/chofer", this.form);
-        this.reset();
-        this.updateList();
-        this.$vToastify.success("Chofer agregado exitósamente 😄", "¡Hecho!");
-        this.$modal.hide("chofer-add");
+        const { data } = await this.$axios.post("/chofer/all");
+        this.choferes = data;
       } catch (error) {
-        console.error("Something goes wrong");
+        console.log(error);
       }
-    },
-    reset() {
-      this.form.nombre = "";
-      this.form.apellido = "";
-      this.form.rut = "";
     },
     async destroy({ id }) {
       if (this.choferes.some(c => c.id === id)) {
@@ -134,7 +77,7 @@ export default {
       );
     }
   },
-  components: { ChoferCard }
+  components: { ChoferCard, ModalAddChofer }
 };
 </script>
 

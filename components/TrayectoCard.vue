@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center shadow-md mb-4">
+  <div class="block md:flex items-center shadow-md mb-4">
     <div class="w-full bg-indigo-100 py-2 px-6 flex items-center">
       <div class="tracking-wide text-lg mr-auto">
         <p class="mb-1 text-xs text-gray-600">Salida:</p>
@@ -17,31 +17,64 @@
         <p class="mb-1 text-xs text-indigo-300">Retorno:</p>
         <p>{{ trayecto.vuelta }}</p>
       </div>
-      <!-- Destroy -->
-      <button
-        class="text-indigo-400 hover:text-indigo-300 focus:outline-none"
-        @click="$emit('destroy', trayecto)"
-      >
-        <svg
-          class="fill-current"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
+      <div class="flex items-center">
+        <!-- Destroy -->
+        <button
+          v-show="deletable"
+          class="text-indigo-400 hover:text-indigo-300 focus:outline-none"
+          @click="$emit('destroy', trayecto)"
         >
-          <path
-            d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-          />
-          <path d="M0 0h24v24H0z" fill="none" />
-        </svg>
-      </button>
+          <svg
+            class="fill-current"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+            />
+            <path d="M0 0h24v24H0z" fill="none" />
+          </svg>
+        </button>
+        <!-- Horarios -->
+        <button
+          v-show="btnHorarios"
+          class="text-indigo-400 hover:text-indigo-300 focus:outline-none ml-2"
+          @click="$emit('schedule', trayecto)"
+        >
+          <svg
+            class="fill-current"
+            width="20"
+            height="20"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["trayecto"]
+  props: {
+    trayecto: {
+      type: Object
+    },
+    deletable: {
+      type: Boolean,
+      default: true
+    },
+    btnHorarios: {
+      type: Boolean,
+      default: true
+    }
+  }
 };
 </script>
 

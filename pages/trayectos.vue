@@ -21,24 +21,25 @@
         :key="trayecto.id"
         :trayecto="trayecto"
         @destroy="destroy"
+        @schedule="$refs.modalHorarios.show(trayecto)"
+        :deletable="false"
       ></trayecto-card>
     </transition-group>
 
-    <!-- Add Chofer -->
+    <!-- Add Trayecto -->
     <modal name="trayecto-add" height="auto" :scrollable="true">
       <div class="p-4 text-center bg-gray-200">
         <h1 class="text-lg font-bold text-gray-700">Ingreso Chofer</h1>
       </div>
       <form @submit.prevent="add">
-        <!-- @keydown.enter="add" -->
         <div class="px-4 py-6">
           <input-form
             v-model="form.ida"
             class="mb-2"
             label="ida"
             name="ida"
-            type="date"
-            placeholder="DD/MM/YYYY"
+            type="text"
+            placeholder="Santiago"
             :required="true"
           ></input-form>
           <input-form
@@ -46,8 +47,8 @@
             class="mb-2"
             label="vuelta"
             name="vuelta"
-            type="date"
-            placeholder="DD/MM/YYYY"
+            type="text"
+            placeholder="Valparaiso"
             :required="true"
           ></input-form>
           <input-form
@@ -62,22 +63,28 @@
         </div>
         <div class="p-4 bg-gray-200 flex">
           <button type="submit" class="btn-indigo-o">Guardar</button>
-          <button class="btn-default" @click="$modal.hide('trayecto-add')">
+          <button
+            type="button"
+            class="btn-default"
+            @click="$modal.hide('trayecto-add')"
+          >
             Cerrar
           </button>
         </div>
       </form>
     </modal>
-    <!-- Add Chofer -->
+    <modal-horarios ref="modalHorarios"></modal-horarios>
   </div>
 </template>
 
 <script>
 import TrayectoCard from "~/components/TrayectoCard";
+import ModalHorarios from "~/components/ModalHorarios";
 
 export default {
   data() {
     return {
+      horarios: [],
       form: {
         ida: "",
         vuelta: "",
@@ -95,12 +102,6 @@ export default {
   },
   methods: {
     async destroy({ id }) {
-      // if (this.trayectos.some(c => c.id === id)) {
-      //   return this.$vToastify.error(
-      //     "No puedes eliminar choferes con buses asignados",
-      //     "Nope!"
-      //   );
-      // }
       try {
         await this.$axios.delete(`/trayecto/${id}`, {
           data: {
@@ -149,7 +150,7 @@ export default {
       );
     }
   },
-  components: { TrayectoCard }
+  components: { TrayectoCard, ModalHorarios }
 };
 </script>
 

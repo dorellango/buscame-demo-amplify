@@ -23,12 +23,43 @@
         </div>
         <!-- Links -->
         <div class="ml-2 flex items-center">
-          <nuxt-link class="mx-2 tracking-wide" to="/choferes">Choferes</nuxt-link>
-          <nuxt-link class="mx-2 tracking-wide" to="/trayectos">Trayectos</nuxt-link>
-          <nuxt-link class="mx-2 tracking-wide" to="/pasajeros">Pasajeros</nuxt-link>
-          <nuxt-link class="mx-2 tracking-wide" to="/buses">Buses</nuxt-link>
+          <div class="items-center mr-2 hidden md:flex">
+            <nuxt-link
+              class="mx-2 tracking-wider hover:text-indigo-400"
+              :class="[$nuxt.$route.name === 'choferes' ? 'font-bold' : '']"
+              to="/choferes"
+              >Choferes</nuxt-link
+            >
+            <nuxt-link
+              class="mx-2 tracking-wider hover:text-indigo-400"
+              :class="[$nuxt.$route.name === 'trayectos' ? 'font-bold' : '']"
+              to="/trayectos"
+              >Trayectos</nuxt-link
+            >
+            <nuxt-link
+              class="mx-2 tracking-wider hover:text-indigo-400"
+              :class="[$nuxt.$route.name === 'pasajeros' ? 'font-bold' : '']"
+              to="/pasajeros"
+              >Pasajeros</nuxt-link
+            >
+            <nuxt-link
+              class="mx-2 tracking-wider hover:text-indigo-400"
+              :class="[$nuxt.$route.name === 'buses' ? 'font-bold' : '']"
+              to="/buses"
+              >Buses</nuxt-link
+            >
+            <nuxt-link
+              class="mx-2 tracking-wider hover:text-indigo-400"
+              :class="[$nuxt.$route.name === 'asientos' ? 'font-bold' : '']"
+              to="/asientos"
+              >Asientos</nuxt-link
+            >
+          </div>
 
-          <nuxt-link class="ml-2 tracking-wide btn-yellow inline-block" to="/booking">
+          <nuxt-link
+            class="text-yellow-500 border-l border-dashed ml-2 pl-2 border-indigo-500 hover:text-yellow-400"
+            to="/booking"
+          >
             <svg
               class="h-6 fill-current"
               xmlns="http://www.w3.org/2000/svg"

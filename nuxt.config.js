@@ -53,7 +53,7 @@ export default {
    * Axios config
    */
   axios: {
-    baseURL: process.env.API_BASE_URL || 'http://ec2-18-228-17-151.sa-east-1.compute.amazonaws.com'
+    baseURL: process.env.API_BASE_URL || 'https://testing.destacame.cl"'
   },
   /*
   ** Build configuration

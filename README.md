@@ -23,6 +23,10 @@ El uso de Amplify Framework nos abriría la posibilidad de permitir el registro 
 
 Otra potencial mejora sería el uso de Lambda Edge y forzar la entrega de contenido estático para motores de busqueda. Articulo relacionado https://medium.com/@dilanthaprasanjith/solving-spa-meta-problems-with-the-power-of-lambda-edge-cdc8773e23cc
 
+## Estilos
+
+Para los estilos se ha utilizado Tailwind https://tailwindcss.com/ como framework utility-first, pero para motivos de esta demo también se han declarado algunas clases en SASS que extienden del framework bajo la directiva @apply. Ver layout default.vue
+
 
 ## Build
 

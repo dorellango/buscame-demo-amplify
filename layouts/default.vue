@@ -1,55 +1,37 @@
 <template>
-  <div>
-    <nuxt />
+  <div class="sans-serif bg-gray-100 h-screen">
+    <Nav />
+    <div class="container mx-auto px-4">
+      <nuxt />
+    </div>
   </div>
 </template>
 
-<style>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
+<script>
+import Nav from "~/components/Nav";
 
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
-}
+export default {
+  components: { Nav }
+};
+</script>
 
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
+<style lang="sass">
+  .btn-default
+    @apply rounded font-bold px-6 py-2 tracking-wider text-gray-600
+  .btn-indigo
+    @apply bg-indigo-500 border-2 border-indigo-500 rounded font-bold shadow-md px-6 py-2 tracking-wider text-indigo-100
+  .btn-indigo-o
+    @apply border-2 border-indigo-500 rounded font-bold shadow-md px-6 py-2 tracking-wider text-indigo-500
+  .btn-yellow
+    @apply bg-yellow-500 border-2 border-yellow-500 rounded font-bold shadow-md px-6 py-2 tracking-wider text-yellow-900
 
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
+  .fade-enter-active,
+  .fade-leave-active
+    transition: opacity 0.5s
 
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
+  .fade-enter,
+  .fade-leave-to
+    opacity: 0
 
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
-}
+
 </style>

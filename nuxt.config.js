@@ -28,6 +28,11 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/modal',
+    '~/plugins/rut',
+    '~/plugins/flash',
+    '~/plugins/global',
+    '~/plugins/axios',
   ],
   /*
   ** Nuxt.js dev-modules
@@ -40,7 +45,16 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/ngrok',
+    '@nuxtjs/axios'
   ],
+
+  /**
+   * Axios config
+   */
+  axios: {
+    baseURL: process.env.API_BASE_URL || 'http://ec2-18-228-17-151.sa-east-1.compute.amazonaws.com'
+  },
   /*
   ** Build configuration
   */

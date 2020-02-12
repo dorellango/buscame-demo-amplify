@@ -31,26 +31,25 @@ export default {
           .filter(h => h.id_trayecto === t.id)
           .map(h => h.id_bus);
 
-        const busesTrayecto = this.buses
-          .filter(b => horariosBusesTrayecto.includes(b.id))
-          .map(b => b.id);
-
         const asientosTrayecto = this.asientos.filter(a =>
-          busesTrayecto.includes(a.id_bus)
+          horariosBusesTrayecto.includes(a.id_bus)
         );
 
         return [`${t.terminal}`, asientosTrayecto.length];
       });
+
+      const avg = this.asientos.length / this.trayectos.length;
 
       GoogleCharts.load(() => {
         const chartData = GoogleCharts.api.visualization.arrayToDataTable([
           ["Trayecto", "Pasajeros"],
           ...trayectosPasajeros
         ]);
+
         const options = {
           hAxis: { title: "Trayectos" },
           vAxis: { title: "Pasajeros" },
-          // legend: "none",
+          title: `avg ${avg}`,
           trendlines: {
             0: {
               type: "exponential",
@@ -63,18 +62,8 @@ export default {
               pointSize: 10,
               pointsVisible: true
             }
-          } // Draw a trendline for data series 0.
+          }
         };
-        // const data = google.visualization.arrayToDataTable([
-        //   [
-        //     "M/AÑO",
-        //     { type: "number", role: "data" },
-        //     { type: "string", role: "annotation" },
-        //     { type: "string", role: "tooltip", p: { html: true } }
-        //   ],
-        //   ...this.chartData
-        // ]);
-        // console.log(data);
         const chart = new GoogleCharts.api.visualization.ColumnChart(this.$el);
         chart.draw(chartData, options);
       });

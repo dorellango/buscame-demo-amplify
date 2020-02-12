@@ -35,8 +35,18 @@
         ></input-rut>
       </div>
       <div class="p-4 bg-gray-200 flex">
-        <button type="submit" class="btn-indigo-o">Guardar</button>
-        <button class="btn-default" @click="$modal.hide('pasajero-add')">
+        <button
+          type="submit"
+          class="btn-indigo-o"
+          :class="canSubmit ? '' : 'pointer-events-none opacity-50'"
+        >
+          Guardar
+        </button>
+        <button
+          type="button"
+          class="btn-default"
+          @click="$modal.hide('pasajero-add')"
+        >
           Cerrar
         </button>
       </div>
@@ -71,6 +81,11 @@ export default {
       this.form.nombre = "";
       this.form.apellido = "";
       this.form.rut = "";
+    }
+  },
+  computed: {
+    canSubmit() {
+      return Object.keys(this.form).every(f => this.form[f] !== "");
     }
   }
 };

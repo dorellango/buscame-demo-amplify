@@ -55,7 +55,7 @@ export default {
       }
     },
     async destroy({ id }) {
-      if (this.choferes.some(c => c.id === id)) {
+      if (this.buses.some(b => b.id_chofer === id)) {
         return this.$vToastify.error(
           "No puedes eliminar choferes con buses asignados",
           "Nope!"

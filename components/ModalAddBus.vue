@@ -48,7 +48,13 @@
         </div>
       </div>
       <div class="p-4 bg-gray-200 flex">
-        <button type="submit" class="btn-indigo-o">Guardar</button>
+        <button
+          type="submit"
+          class="btn-indigo-o"
+          :class="canSubmit ? '' : 'pointer-events-none opacity-50'"
+        >
+          Guardar
+        </button>
         <button
           type="button"
           class="btn-default"
@@ -88,6 +94,11 @@ export default {
       } catch (error) {
         console.error("Something goes wrong", error);
       }
+    }
+  },
+  computed: {
+    canSubmit() {
+      return Object.keys(this.form).every(k => this.form[k] !== "");
     }
   }
 };

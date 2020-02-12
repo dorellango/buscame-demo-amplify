@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full md:w-1/4 p-2">
+  <div class="w-full md:w-1/3 lg:w-1/4 p-2">
     <div
       class="text-center shadow-lg rounded bg-white py-4 px-6 border-white hover:border-indigo-500 border-2 relative"
     >

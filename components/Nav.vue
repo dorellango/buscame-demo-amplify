@@ -66,7 +66,7 @@ import NavMobile from "~/components/NavMobile";
 import Logo from "~/components/Logo";
 
 export default {
-  components: { Logo }
+  components: { Logo, NavMobile }
 };
 </script>
 

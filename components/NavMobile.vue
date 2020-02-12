@@ -3,7 +3,7 @@
     <button
       type="button"
       @click="show = !show"
-      class="text-indigo-100 hover:text-indigo-400 focus:outline-none"
+      class="text-indigo-100 hover:text-indigo-400 focus:outline-none block md:hidden"
     >
       <svg
         class="h-8 w-8 fill-current"

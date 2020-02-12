@@ -130,7 +130,7 @@ export default {
         );
       }
       try {
-        const { data } = await this.$axios.post("/horario");
+        const { data } = await this.$axios.post("/horario", this.form);
 
         this.fetchHorarios();
         this.$vToastify.success("Trayecto agregado exitósamente 😢", "¡Hecho!");

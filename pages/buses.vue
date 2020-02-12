@@ -13,6 +13,7 @@
       <button @click="$modal.show('bus-add')" class="btn-indigo">
         Ingresar
       </button>
+      <!-- Modal Bus -->
       <modal-add-bus :choferes="choferes" @added="updateList"></modal-add-bus>
     </div>
     <!-- Buses -->
@@ -34,15 +35,24 @@ import ModalAddBus from "~/components/ModalAddBus";
 
 export default {
   async asyncData({ $axios }) {
-    const buses = await $axios.$post("/bus/all");
-    const choferes = await $axios.$post("/chofer/all");
+    try {
+      const buses = await $axios.$post("/bus/all");
+      const choferes = await $axios.$post("/chofer/all");
+      const horarios = await $axios.$post("/horario/all");
 
-    return { buses, choferes };
+      return { buses, choferes, horarios };
+    } catch (error) {
+      console.log(error);
+    }
   },
   methods: {
     async updateList() {
-      const { data } = await this.$axios.post("/bus/all");
-      this.buses = data;
+      try {
+        const { data } = await this.$axios.post("/bus/all");
+        this.buses = data;
+      } catch (error) {
+        console.log(error);
+      }
     },
     removeBus(id) {
       const { buses } = this;
@@ -52,6 +62,12 @@ export default {
       );
     },
     async destroy({ id }) {
+      if (this.isThereAnSchedule(id)) {
+        return this.$vToastify.warning(
+          "Existe un horario asociado a este bus",
+          "Imposible!"
+        );
+      }
       try {
         await this.$axios.delete(`/bus/${id}`);
 
@@ -60,6 +76,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    isThereAnSchedule(id) {
+      return this.horarios.some(h => h.id_bus === id);
     }
   },
   components: { BusCard, ModalAddBus }

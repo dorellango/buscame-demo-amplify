@@ -1,5 +1,5 @@
 <template>
-  <div class="block md:flex items-center shadow-md mb-4">
+  <div class="items-center mb-4" :class="isColumn ? 'block' : 'block md:flex'">
     <div class="w-full bg-indigo-100 py-2 px-6 flex items-center">
       <div class="tracking-wide text-lg mr-auto">
         <p class="mb-1 text-xs text-gray-600">Salida:</p>
@@ -73,6 +73,10 @@ export default {
     btnHorarios: {
       type: Boolean,
       default: true
+    },
+    isColumn: {
+      type: Boolean,
+      default: false
     }
   }
 };

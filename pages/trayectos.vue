@@ -21,6 +21,7 @@
     <!-- Trayectos -->
     <transition-group name="fade" tag="div">
       <trayecto-card
+        class="shadow-md rounded"
         v-for="trayecto in trayectos"
         :key="trayecto.id"
         :trayecto="trayecto"

@@ -87,6 +87,11 @@
         ></horario-list-item>
       </transition-group>
     </div>
+    <div class="p-4 bg-gray-200 flex">
+      <button type="button" class="btn-default" @click="hide()">
+        Cerrar
+      </button>
+    </div>
   </modal>
 </template>
 
@@ -98,10 +103,7 @@ import InputTime from "~/components/InputTime";
 export default {
   data() {
     return {
-      buses: [],
       datepicker: new Date(),
-      horarios: [],
-      horariosByDate: [],
       isValidTime: false,
       form: {
         fecha: "",
@@ -117,7 +119,6 @@ export default {
   watch: {
     datepicker() {
       this.updateFecha();
-      this.fetchHorarios();
     }
   },
   methods: {
@@ -134,18 +135,17 @@ export default {
       }
       try {
         const { data } = await this.$axios.post("/horario", this.form);
-
-        this.fetchHorarios();
+        await store.dispatch("horarios/get");
         this.$vToastify.success("Trayecto agregado exitósamente 😢", "¡Hecho!");
       } catch (error) {
         console.log(error.response.data);
       }
     },
-    async destroy({ id }) {
+    async destroy(horario) {
       try {
-        await this.$axios.delete(`/horario/${id}`);
-        this.removeHorario(id);
-        this.$vToastify.info("Trayecto eliminado exitósamente 😢", "¡Hecho!");
+        await this.$axios.delete(`/horario/${horario.id}`);
+        this.$store.commit("horarios/remove", horario);
+        this.$vToastify.info("Horario eliminado exitósamente 😢", "¡Hecho!");
       } catch (error) {
         console.log(error.response.data);
       }
@@ -157,45 +157,35 @@ export default {
       return format(new Date(date), "MM/d/Y");
     },
     hide() {
-      this.$modal.show("hide");
+      this.$modal.hide("horarios");
     },
-    show({ id }) {
+    async show({ id }) {
       this.form.id_trayecto = id;
-      this.fetchBuses();
-      this.fetchHorarios();
+      await this.$store.dispatch("horarios/get");
+      await this.$store.dispatch("buses/get");
       this.$modal.show("horarios");
+    }
+  },
+  components: { HorarioListItem, InputTime },
+  computed: {
+    horarios() {
+      return this.$store.state.horarios.list;
     },
-    async fetchBuses() {
-      const { data: buses } = await this.$axios.post("/bus/all");
-      this.buses = buses;
+    buses() {
+      return this.$store.state.buses.list;
     },
-    async fetchHorarios() {
-      const { data: horarios } = await this.$axios.post("/horario/all");
-
-      this.horarios = horarios;
-
-      this.horariosByDate = horarios.filter(
+    horariosByDate() {
+      return this.$store.state.horarios.list.filter(
         h =>
           h.id_trayecto === this.form.id_trayecto &&
           isSameDay(new Date(h.fecha), new Date(this.datepicker))
       );
     },
-    removeHorario(id) {
-      const { horariosByDate } = this;
-      horariosByDate.splice(
-        horariosByDate.findIndex(h => h.id === id),
-        1
-      );
-    }
-  },
-  components: { HorarioListItem, InputTime },
-  computed: {
     schedulesCalendarTrayectos() {
       return [
         {
           key: "today",
           dot: "yellow",
-          // highlight: "red",
           dates: this.horarios
             .filter(h => h.id_trayecto === this.form.id_trayecto)
             .map(h => new Date(h.fecha))

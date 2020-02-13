@@ -13,10 +13,7 @@
       <button @click="$modal.show('trayecto-add')" class="btn-indigo">
         Ingresar
       </button>
-      <modal-add-trayecto
-        ref="modalAddTrayecto"
-        @added="updateList"
-      ></modal-add-trayecto>
+      <modal-add-trayecto></modal-add-trayecto>
     </div>
     <!-- Trayectos -->
     <transition-group name="fade" tag="div">
@@ -45,37 +42,31 @@ export default {
       horarios: []
     };
   },
-  async asyncData({ $axios }) {
+  async fetch({ store }) {
     try {
-      const trayectos = await $axios.$post("/trayecto/all");
-      return { trayectos };
+      await store.dispatch("trayectos/get");
+      await store.dispatch("horarios/get");
     } catch (error) {
       console.log(error);
     }
   },
   methods: {
-    async destroy({ id }) {
+    async destroy(trayecto) {
       try {
-        await this.$axios.delete(`/trayecto/${id}`);
-        this.removeTrayecto(id);
+        await this.$axios.delete(`/trayecto/${trayecto.id}`);
+        this.$store.commit("trayectos/remove", trayecto);
         this.$vToastify.info("Trayecto eliminado exitósamente 😢", "¡Hecho!");
       } catch (error) {
         console.log(error);
       }
-    },
-    async updateList() {
-      const { data } = await this.$axios.post("/trayecto/all");
-      this.trayectos = data;
-    },
-    removeTrayecto(id) {
-      const { trayectos } = this;
-      trayectos.splice(
-        trayectos.findIndex(c => c.id === id),
-        1
-      );
     }
   },
-  components: { TrayectoCard, ModalHorarios, ModalAddTrayecto }
+  components: { TrayectoCard, ModalHorarios, ModalAddTrayecto },
+  computed: {
+    trayectos() {
+      return this.$store.state.trayectos.list;
+    }
+  }
 };
 </script>
 

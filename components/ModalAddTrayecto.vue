@@ -1,5 +1,4 @@
 <template>
-  <!-- Add Trayecto -->
   <modal name="trayecto-add" height="auto" :scrollable="true" :adaptive="true">
     <div class="p-4 text-center bg-gray-200">
       <h1 class="text-lg font-bold text-gray-700">Ingreso Trayecto</h1>
@@ -42,11 +41,7 @@
         >
           Guardar
         </button>
-        <button
-          type="button"
-          class="btn-default"
-          @click="$modal.hide('trayecto-add')"
-        >
+        <button type="button" class="btn-default" @click="hide()">
           Cerrar
         </button>
       </div>
@@ -69,10 +64,10 @@ export default {
     async add() {
       try {
         await this.$axios.post("/trayecto", this.form);
+        await this.$store.dispatch("trayectos/get");
         this.reset();
+        this.hide();
         this.$vToastify.success("Trayecto agregado exitósamente 😄", "¡Hecho!");
-        this.$emit("added");
-        this.$modal.hide("trayecto-add");
       } catch (error) {
         console.error("Something goes wrong");
       }
@@ -81,6 +76,9 @@ export default {
       this.form.ida = "";
       this.form.vuelta = "";
       this.form.terminal = "";
+    },
+    hide() {
+      this.$modal.hide("trayecto-add");
     }
   },
   computed: {

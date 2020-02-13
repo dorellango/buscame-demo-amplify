@@ -3,7 +3,6 @@
     <div class="container mx-auto px-4">
       <div class="flex items-center py-4 h-16">
         <logo></logo>
-        <!-- Links -->
         <div class="ml-2 flex items-center">
           <!-- Mobile -->
           <nav-mobile ref="navMobile"></nav-mobile>

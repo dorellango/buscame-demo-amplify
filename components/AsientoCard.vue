@@ -3,19 +3,23 @@
     class="shadow-lg py-4 px-6 rounded bg-white mb-8 flex items-center border-white hover:border-indigo-500 border-2"
   >
     <svg
-      class="mr-2 text-indigo-500"
       xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
       width="24"
       height="24"
+      class="fill-current mr-2 text-indigo-500"
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
     >
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
+      <defs>
+        <path id="a" d="M0 0h24v24H0V0z" />
+      </defs>
+      <clipPath id="b">
+        <use xlink:href="#a" overflow="visible" />
+      </clipPath>
+      <path
+        d="M4 18v3h3v-3h10v3h3v-6H4zm15-8h3v3h-3zM2 10h3v3H2zm15 3H7V5c0-1.1.9-2 2-2h6c1.1 0 2 .9 2 2v8z"
+        clip-path="url(#b)"
+      />
     </svg>
     <div class="flex items-center flex-1">
       <p class="text-lg mr-auto" v-text="`${asiento.num_asiento}`"></p>

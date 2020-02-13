@@ -69,6 +69,11 @@ export default {
     return {
       show: false
     };
+  },
+  methods: {
+    hide() {
+      this.show = false;
+    }
   }
 };
 </script>

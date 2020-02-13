@@ -1,11 +1,16 @@
 <template>
-  <modal name="horarios" height="auto" :scrollable="true">
+  <modal name="horarios" height="auto" :scrollable="true" :adaptive="true">
     <div class="p-4 text-center bg-gray-200">
       <h1 class="text-lg font-bold text-gray-700">Horarios</h1>
     </div>
     <!-- Calendario -->
-    <div class="flex items-center justify-center px-4 py-6">
-      <date-picker v-model="datepicker" is-inline is-expanded></date-picker>
+    <div class="px-4 py-6">
+      <v-date-picker
+        v-model="datepicker"
+        :attributes="schedulesCalendarTrayectos"
+        is-inline
+        is-expanded
+      ></v-date-picker>
     </div>
     <!-- Horarios -->
     <div class="px-4 mb-4">
@@ -117,15 +122,13 @@ export default {
   },
   methods: {
     isThereAPreviuosScheduleForBus() {
-      const { fecha, hora, id_trayecto, id_bus } = this.form;
-      return this.horarios.some(
-        h => h.id_trayecto === id_trayecto && h.id_bus === id_bus // CHECK IF OLDER/PAST
-      );
+      const { id_bus } = this.form;
+      return this.horarios.some(h => h.id_bus === id_bus);
     },
     async add() {
       if (this.isThereAPreviuosScheduleForBus()) {
         return this.$vToastify.warning(
-          "Bus ya fue asignado a un horario para este trayecto",
+          "Bus ya fue asignado a un horario",
           "Ups!"
         );
       }
@@ -179,12 +182,26 @@ export default {
     },
     removeHorario(id) {
       const { horariosByDate } = this;
-      horarios.splice(
-        horarios.findIndex(h => h.id === id),
+      horariosByDate.splice(
+        horariosByDate.findIndex(h => h.id === id),
         1
       );
     }
   },
-  components: { HorarioListItem, InputTime }
+  components: { HorarioListItem, InputTime },
+  computed: {
+    schedulesCalendarTrayectos() {
+      return [
+        {
+          key: "today",
+          dot: "yellow",
+          // highlight: "red",
+          dates: this.horarios
+            .filter(h => h.id_trayecto === this.form.id_trayecto)
+            .map(h => new Date(h.fecha))
+        }
+      ];
+    }
+  }
 };
 </script>

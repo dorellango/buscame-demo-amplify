@@ -3,10 +3,9 @@
     <div class="container mx-auto px-4">
       <div class="flex items-center py-4 h-16">
         <logo></logo>
-        <!-- Links -->
         <div class="ml-2 flex items-center">
           <!-- Mobile -->
-          <nav-mobile></nav-mobile>
+          <nav-mobile ref="navMobile"></nav-mobile>
           <div class="items-center mr-2 hidden md:flex">
             <nuxt-link
               class="mx-2 tracking-wider hover:text-indigo-400"
@@ -42,6 +41,7 @@
 
           <nuxt-link
             class="text-yellow-500 border-l border-dashed ml-2 pl-2 border-indigo-500 hover:text-yellow-400"
+            @click.native="hideMobile"
             to="/booking"
           >
             <svg
@@ -66,7 +66,12 @@ import NavMobile from "~/components/NavMobile";
 import Logo from "~/components/Logo";
 
 export default {
-  components: { Logo, NavMobile }
+  components: { Logo, NavMobile },
+  methods: {
+    hideMobile() {
+      this.$refs.navMobile.hide();
+    }
+  }
 };
 </script>
 

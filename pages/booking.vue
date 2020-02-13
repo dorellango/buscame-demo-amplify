@@ -67,7 +67,7 @@
           <button
             type="button"
             @click="book"
-            class="btn-indigo w-full focus:outline-none"
+            class="hidden md:block btn-indigo w-full focus:outline-none"
             :class="canSubmit ? '' : 'opacity-25 pointer-events-none'"
           >
             Book
@@ -140,8 +140,8 @@
                 v-for="(n, index) in 10"
                 :key="index"
                 :number="n"
-                @chosed="busSeatChosed"
-                :chosed="form.num_asiento === n"
+                @picked="busSeatpicked(n)"
+                :picked="form.num_asiento === n"
                 :active="
                   asientos.some(
                     a => a.num_asiento === n && a.id_bus === form.id_bus
@@ -156,6 +156,16 @@
               ATRÁS
             </p>
           </div>
+
+          <!-- Book -->
+          <button
+            type="button"
+            @click="book"
+            class="md:hidden btn-indigo w-full focus:outline-none mt-4 pt-4"
+            :class="canSubmit ? '' : 'opacity-25 pointer-events-none'"
+          >
+            Book
+          </button>
         </div>
       </div>
     </div>
@@ -200,7 +210,8 @@ export default {
       this.fetchAsientos();
       this.asientos = this.asientos.filter(a => a.id_bus === id);
     },
-    busSeatChosed(seat) {
+    busSeatpicked(seat) {
+      console.log(seat);
       this.form.num_asiento = seat;
     },
     async book() {

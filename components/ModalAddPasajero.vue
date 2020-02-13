@@ -4,7 +4,6 @@
       <h1 class="text-lg font-bold text-gray-700">Ingreso Pasajero</h1>
     </div>
     <form @submit.prevent="add">
-      <!-- @keydown.enter="add" -->
       <div class="px-4 py-6">
         <input-form
           v-model="form.nombre"
@@ -69,10 +68,10 @@ export default {
     async add() {
       try {
         await this.$axios.post("/pasajero", this.form);
+        await this.$store.dispatch("pasajeros/get");
         this.reset();
+        this.hide();
         this.$vToastify.success("Pasajero agregado exitósamente 😄", "¡Hecho!");
-        this.$emit("added");
-        this.$modal.hide("pasajero-add");
       } catch (error) {
         console.error("Something goes wrong");
       }
@@ -81,6 +80,9 @@ export default {
       this.form.nombre = "";
       this.form.apellido = "";
       this.form.rut = "";
+    },
+    hide() {
+      this.$modal.hide("pasajero-add");
     }
   },
   computed: {

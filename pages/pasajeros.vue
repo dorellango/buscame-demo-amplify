@@ -17,7 +17,7 @@
       >
         Ingresar
       </button>
-      <modal-add-pasajero @added="updateList"></modal-add-pasajero>
+      <modal-add-pasajero></modal-add-pasajero>
     </div>
     <transition-group name="fade" tag="div">
       <pasajero-card
@@ -35,34 +35,30 @@ import PasajeroCard from "~/components/PasajeroCard";
 import ModalAddPasajero from "~/components/ModalAddPasajero";
 
 export default {
-  async asyncData({ $axios }) {
-    const pasajeros = await $axios.$post("/pasajero/all");
-
-    return { pasajeros };
+  async fetch({ store }) {
+    try {
+      await store.dispatch("pasajeros/get");
+    } catch (error) {
+      console.log(error);
+    }
   },
   methods: {
-    async updateList() {
-      const { data } = await this.$axios.post("/pasajero/all");
-      this.pasajeros = data;
-    },
-    async destroy({ id }) {
+    async destroy(pasajero) {
       try {
-        await this.$axios.delete(`/pasajero/${id}`);
-        this.removePasajero(id);
+        await this.$axios.delete(`/pasajero/${pasajero.id}`);
+        this.$store.commit("pasajeros/remove", pasajero);
         this.$vToastify.info("Pasajero eliminado exitósamente 😢", "¡Hecho!");
       } catch (error) {
         console.log(error);
       }
-    },
-    removePasajero(id) {
-      const { pasajeros } = this;
-      pasajeros.splice(
-        pasajeros.findIndex(c => c.id === id),
-        1
-      );
     }
   },
-  components: { PasajeroCard, ModalAddPasajero }
+  components: { PasajeroCard, ModalAddPasajero },
+  computed: {
+    pasajeros() {
+      return this.$store.state.pasajeros.list;
+    }
+  }
 };
 </script>
 

@@ -1,9 +1,12 @@
 <template>
   <button
-    @click="$emit('chosed')"
+    @click="$emit('picked')"
     type="button"
     class="focus:outline-none flex items-center justify-center font-mono"
-    :class="active ? 'text-green-600' : ''"
+    :class="[
+      picked ? 'text-green-600' : '',
+      active ? 'pointer-events-none opacity-25' : ''
+    ]"
   >
     <p class="text-gray-500 mr-1" v-text="number"></p>
     <svg
@@ -30,7 +33,7 @@
 
 <script>
 export default {
-  props: ["active", "number"]
+  props: ["active", "number", "picked"]
 };
 </script>
 

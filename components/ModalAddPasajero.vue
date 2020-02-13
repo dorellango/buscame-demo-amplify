@@ -1,5 +1,5 @@
 <template>
-  <modal name="pasajero-add" height="auto" :scrollable="true">
+  <modal name="pasajero-add" height="auto" :scrollable="true" :adaptive="true">
     <div class="p-4 text-center bg-gray-200">
       <h1 class="text-lg font-bold text-gray-700">Ingreso Pasajero</h1>
     </div>

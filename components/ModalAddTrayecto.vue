@@ -1,8 +1,8 @@
 <template>
   <!-- Add Trayecto -->
-  <modal name="trayecto-add" height="auto" :scrollable="true">
+  <modal name="trayecto-add" height="auto" :scrollable="true" :adaptive="true">
     <div class="p-4 text-center bg-gray-200">
-      <h1 class="text-lg font-bold text-gray-700">Ingreso Chofer</h1>
+      <h1 class="text-lg font-bold text-gray-700">Ingreso Trayecto</h1>
     </div>
     <form @submit.prevent="add">
       <div class="px-4 py-6">

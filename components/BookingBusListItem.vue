@@ -56,18 +56,17 @@
 
 <script>
 export default {
-  data() {
-    return {
-      bus: ""
-    };
-  },
-  mounted() {
-    this.bus = this.buses.find(b => b.id === this.horario.id_bus);
-  },
-  props: ["horario", "buses", "active"],
+  props: ["horario", "active"],
   methods: {
     chooseBus() {
       this.$emit("picked", this.horario.id_bus);
+    }
+  },
+  computed: {
+    bus() {
+      return this.$store.state.buses.list.find(
+        b => b.id === this.horario.id_bus
+      );
     }
   }
 };

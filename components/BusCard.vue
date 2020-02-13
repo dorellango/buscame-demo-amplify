@@ -61,12 +61,14 @@
 
 <script>
 export default {
-  data() {
-    return {
-      chofer: this.choferes.find(c => c.id === this.bus.id_chofer)
-    };
-  },
-  props: ["bus", "choferes"]
+  props: ["bus"],
+  computed: {
+    chofer() {
+      return this.$store.state.choferes.list.find(
+        c => c.id === this.bus.id_chofer
+      );
+    }
+  }
 };
 </script>
 

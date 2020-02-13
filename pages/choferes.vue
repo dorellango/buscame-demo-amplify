@@ -13,10 +13,7 @@
       <button @click="$modal.show('chofer-add')" class="btn-indigo">
         Ingresar
       </button>
-      <modal-add-chofer
-        ref="modalAddChofer"
-        @added="updateList"
-      ></modal-add-chofer>
+      <modal-add-chofer></modal-add-chofer>
     </div>
     <!-- Choferes -->
     <transition-group name="fade" tag="div">
@@ -35,49 +32,41 @@ import ChoferCard from "~/components/ChoferCard";
 import ModalAddChofer from "~/components/ModalAddChofer";
 
 export default {
-  async asyncData({ $axios }) {
+  async fetch({ store }) {
     try {
-      const buses = await $axios.$post("/bus/all");
-      const choferes = await $axios.$post("/chofer/all");
-
-      return { choferes, buses };
+      await store.dispatch("choferes/get");
+      await store.dispatch("buses/get");
+      await store.dispatch("horarios/get");
     } catch (error) {
       console.log(error);
     }
   },
   methods: {
-    async updateList() {
-      try {
-        const { data } = await this.$axios.post("/chofer/all");
-        this.choferes = data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async destroy({ id }) {
-      if (this.buses.some(b => b.id_chofer === id)) {
+    async destroy(chofer) {
+      if (this.buses.some(b => b.id_chofer === chofer.id)) {
         return this.$vToastify.error(
           "No puedes eliminar choferes con buses asignados",
           "Nope!"
         );
       }
       try {
-        await this.$axios.delete(`/chofer/${id}`);
-        this.removeChofer(id);
+        await this.$axios.delete(`/chofer/${chofer.id}`);
+        this.$store.commit("choferes/remove", chofer);
         this.$vToastify.info("Chofer eliminado exitósamente 😢", "¡Hecho!");
       } catch (error) {
         console.log(error);
       }
-    },
-    removeChofer(id) {
-      const { choferes } = this;
-      choferes.splice(
-        choferes.findIndex(c => c.id === id),
-        1
-      );
     }
   },
-  components: { ChoferCard, ModalAddChofer }
+  components: { ChoferCard, ModalAddChofer },
+  computed: {
+    choferes() {
+      return this.$store.state.choferes.list;
+    },
+    buses() {
+      return this.$store.state.buses.list;
+    }
+  }
 };
 </script>
 

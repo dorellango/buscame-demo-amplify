@@ -1,11 +1,9 @@
 <template>
-  <!-- Bus -->
   <modal name="bus-add" height="auto" :scrollable="true" :adaptive="true">
     <div class="p-4 text-center bg-gray-200">
       <h1 class="text-lg font-bold text-gray-700">Ingreso Bus</h1>
     </div>
     <form @submit.prevent="add">
-      <!-- @keydown.enter="add" -->
       <div class="px-4 py-6">
         <input-form
           v-model="form.patente"
@@ -55,17 +53,12 @@
         >
           Guardar
         </button>
-        <button
-          type="button"
-          class="btn-default"
-          @click="$modal.hide('bus-add')"
-        >
+        <button type="button" class="btn-default" @click="hide()">
           Cerrar
         </button>
       </div>
     </form>
   </modal>
-  <!-- Bus -->
 </template>
 
 <script>
@@ -79,26 +72,31 @@ export default {
       }
     };
   },
-  props: ["choferes"],
   methods: {
-    reset() {
-      Object.keys(this.form).map(k => (this.form[k] = ""));
-    },
     async add() {
       try {
         await this.$axios.post("/bus", this.form);
+        await this.$store.dispatch("buses/get");
         this.reset();
+        this.hide();
         this.$vToastify.success("Bus agregado exitósamente 😄", "¡Hecho!");
-        this.$emit("added");
-        this.$modal.hide("bus-add");
       } catch (error) {
-        console.error("Something goes wrong", error);
+        console.error(error);
       }
+    },
+    reset() {
+      Object.keys(this.form).map(k => (this.form[k] = ""));
+    },
+    hide() {
+      this.$modal.hide("bus-add");
     }
   },
   computed: {
     canSubmit() {
       return Object.keys(this.form).every(k => this.form[k] !== "");
+    },
+    choferes() {
+      return this.$store.state.choferes.list;
     }
   }
 };

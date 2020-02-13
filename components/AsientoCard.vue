@@ -54,7 +54,12 @@
 
 <script>
 export default {
-  props: ["asiento", "bus"]
+  props: ["asiento"],
+  computed: {
+    bus() {
+      this.$store.buses.list.find(b => b.id === asiento.id_bus);
+    }
+  }
 };
 </script>
 

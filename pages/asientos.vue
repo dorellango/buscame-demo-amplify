@@ -15,12 +15,10 @@
       <asiento-card
         v-for="asiento in asientos"
         :key="asiento.id"
-        :bus="buses.find(b => b.id === asiento.id_bus)"
         :asiento="asiento"
         @destroy="destroy"
       ></asiento-card>
     </transition-group>
-    <!-- Add Pasajero -->
   </div>
 </template>
 
@@ -28,26 +26,19 @@
 import AsientoCard from "~/components/AsientoCard";
 
 export default {
-  data() {
-    return {
-      form: {
-        nombre: "",
-        apellido: "",
-        rut: ""
-      }
-    };
-  },
-  async asyncData({ $axios }) {
-    const asientos = await $axios.$post("/asiento/all");
-    const buses = await $axios.$post("/bus/all");
-
-    return { asientos, buses };
+  async fetch({ store }) {
+    try {
+      await store.dispatch("buses/get");
+      await store.dispatch("asientos/get");
+    } catch (error) {
+      console.log(error);
+    }
   },
   methods: {
-    async destroy({ id }) {
+    async destroy(asiento) {
       try {
         await this.$axios.delete(`/asiento/${id}`);
-        this.removeAsiento(id);
+        this.$store.commit("asientos/remove", asiento);
         this.$vToastify.info(
           "Asiento/reservación eliminado exitósamente 😢",
           "¡Hecho!"
@@ -55,16 +46,14 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    },
-    removeAsiento(id) {
-      const { asientos } = this;
-      asientos.splice(
-        asientos.findIndex(c => c.id === id),
-        1
-      );
     }
   },
-  components: { AsientoCard }
+  components: { AsientoCard },
+  computed: {
+    asientos() {
+      return this.$store.state.asientos.list;
+    }
+  }
 };
 </script>
 

@@ -14,7 +14,7 @@
         Ingresar
       </button>
       <!-- Modal Bus -->
-      <modal-add-bus :choferes="choferes" @added="updateList"></modal-add-bus>
+      <modal-add-bus></modal-add-bus>
     </div>
     <!-- Buses -->
     <transition-group name="fade" class="block md:flex flex-wrap">
@@ -22,7 +22,6 @@
         v-for="bus in buses"
         :key="bus.id"
         :bus="bus"
-        :choferes="choferes"
         @destroy="destroy"
       ></bus-card>
     </transition-group>
@@ -34,54 +33,41 @@ import BusCard from "~/components/BusCard";
 import ModalAddBus from "~/components/ModalAddBus";
 
 export default {
-  async asyncData({ $axios }) {
+  async fetch({ store }) {
     try {
-      const buses = await $axios.$post("/bus/all");
-      const choferes = await $axios.$post("/chofer/all");
-      const horarios = await $axios.$post("/horario/all");
-
-      return { buses, choferes, horarios };
+      await store.dispatch("buses/get");
+      await store.dispatch("choferes/get");
+      await store.dispatch("horarios/get");
     } catch (error) {
       console.log(error);
     }
   },
   methods: {
-    async updateList() {
-      try {
-        const { data } = await this.$axios.post("/bus/all");
-        this.buses = data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    removeBus(id) {
-      const { buses } = this;
-      buses.splice(
-        buses.findIndex(c => c.id === id),
-        1
-      );
-    },
-    async destroy({ id }) {
-      if (this.isThereAnSchedule(id)) {
+    async destroy(bus) {
+      if (this.isThereAnSchedule(bus.id)) {
         return this.$vToastify.warning(
           "Existe un horario asociado a este bus",
           "Imposible!"
         );
       }
       try {
-        await this.$axios.delete(`/bus/${id}`);
-
-        this.removeBus(id);
+        await this.$axios.delete(`/bus/${bus.id}`);
+        this.$store.commit("buses/remove", bus);
         this.$vToastify.info("Bus eliminado exitósamente 😢", "¡Hecho!");
       } catch (error) {
         console.log(error);
       }
     },
     isThereAnSchedule(id) {
-      return this.horarios.some(h => h.id_bus === id);
+      return this.$store.state.horarios.list.some(h => h.id_bus === id);
     }
   },
-  components: { BusCard, ModalAddBus }
+  components: { BusCard, ModalAddBus },
+  computed: {
+    buses() {
+      return this.$store.state.buses.list;
+    }
+  }
 };
 </script>
 

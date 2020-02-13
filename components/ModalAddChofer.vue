@@ -1,11 +1,9 @@
 <template>
-  <!-- Add Chofer -->
   <modal name="chofer-add" height="auto" :scrollable="true" :adaptive="true">
     <div class="p-4 text-center bg-gray-200">
       <h1 class="text-lg font-bold text-gray-700">Ingreso Chofer</h1>
     </div>
     <form @submit.prevent="add">
-      <!-- @keydown.enter="add" -->
       <div class="px-4 py-6">
         <input-form
           v-model="form.nombre"
@@ -53,7 +51,6 @@
       </div>
     </form>
   </modal>
-  <!-- Add Chofer -->
 </template>
 
 <script>
@@ -71,13 +68,16 @@ export default {
     async add() {
       try {
         await this.$axios.post("/chofer", this.form);
+        await this.$store.dispatch("choferes/get");
         this.reset();
+        this.hide();
         this.$vToastify.success("Chofer agregado exitósamente 😄", "¡Hecho!");
-        this.$emit("added");
-        this.$modal.hide("chofer-add");
       } catch (error) {
-        console.error("Something goes wrong");
+        console.error(error);
       }
+    },
+    hide() {
+      this.$modal.hide("chofer-add");
     },
     reset() {
       this.form.nombre = "";

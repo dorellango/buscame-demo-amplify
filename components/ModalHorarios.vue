@@ -134,11 +134,11 @@ export default {
         );
       }
       try {
-        const { data } = await this.$axios.post("/horario", this.form);
-        await store.dispatch("horarios/get");
+        await this.$axios.post("/horario", this.form);
+        await this.$store.dispatch("horarios/get");
         this.$vToastify.success("Trayecto agregado exitósamente 😢", "¡Hecho!");
       } catch (error) {
-        console.log(error.response.data);
+        console.log(error);
       }
     },
     async destroy(horario) {

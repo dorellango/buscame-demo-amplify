@@ -43,7 +43,6 @@
           >
           <select
             v-model="form.id_trayecto"
-            @input="updateBusesAndHorarios"
             class="mb-4 appearance-none bg-gray-200 border-2 border-gray-200 rounded px-4 py-1 text-gray-700 block w-full focus:outline-none focus:border-indigo-600"
             name="id_trayecto"
           >
@@ -58,7 +57,7 @@
           <!-- Trayecto -->
           <trayecto-card
             v-if="form.id_trayecto"
-            :trayecto="trayectos.find(t => t.id === form.id_trayecto)"
+            :trayecto="choosedTrayecto"
             :btn-horarios="false"
             :deletable="false"
             :is-column="true"
@@ -94,15 +93,14 @@
           Selecciona el <strong class="ml-1"> BUS</strong>
         </h3>
         <booking-bus-list-item
-          v-for="horario in horarios"
+          v-for="horario in horariosTrayecto"
           :key="horario.id"
           :horario="horario"
-          :buses="buses"
           :active="form.id_bus === horario.id_bus"
           @picked="updateBus"
         ></booking-bus-list-item>
         <p
-          v-show="horarios.length === 0 && this.form.id_trayecto"
+          v-show="horariosTrayecto.length === 0 && this.form.id_trayecto"
           class="bg-yellow-200 border border-dashed border-yellow-300 border-yellow-500 flex font-bold items-center justify-center mb-4 p-4 rounded text-center text-yellow-700 tracking-wider"
         >
           No hay buses asignados para este trayecto
@@ -156,7 +154,6 @@
               ATRÁS
             </p>
           </div>
-
           <!-- Book -->
           <button
             type="button"
@@ -181,8 +178,6 @@ import { isSameDay } from "date-fns";
 export default {
   data() {
     return {
-      buses: [],
-      horarios: [],
       form: {
         id_trayecto: "",
         id_bus: "",
@@ -191,35 +186,34 @@ export default {
       }
     };
   },
-
-  async asyncData({ $axios }) {
-    const trayectos = await $axios.$post("/trayecto/all");
-    const asientos = await $axios.$post("/asiento/all");
-    const pasajeros = await $axios.$post("/pasajero/all");
-
-    return { trayectos, asientos, pasajeros };
+  watch: {
+    "form.id_trayecto": function() {
+      this.form.id_bus = "";
+    }
+  },
+  async fetch({ store }) {
+    try {
+      await store.dispatch("trayectos/get");
+      await store.dispatch("asientos/get");
+      await store.dispatch("pasajeros/get");
+      await store.dispatch("horarios/get");
+      await store.dispatch("buses/get");
+    } catch (error) {
+      console.log(error);
+    }
   },
   methods: {
-    updateBusesAndHorarios() {
-      this.form.id_bus = "";
-      this.fetchBuses();
-      this.fetchHorarios();
-    },
     updateBus(id) {
       this.form.id_bus = id;
-      this.fetchAsientos();
-      this.asientos = this.asientos.filter(a => a.id_bus === id);
     },
     busSeatpicked(seat) {
-      console.log(seat);
       this.form.num_asiento = seat;
     },
     async book() {
       try {
         const { data } = await this.$axios.post("/asiento", this.form);
-
+        await this.$store.dispatch("pasajeros/get");
         this.reset();
-
         this.$vToastify.success("Reserva creada con éxito", "Hecho!");
       } catch (error) {
         console.log(error);
@@ -230,8 +224,6 @@ export default {
       this.form.id_trayecto = "";
       this.form.id_bus = "";
       this.form.id_pasajero = "";
-      this.asientos = [];
-      this.horarios = [];
     },
     async fetchBuses() {
       const { data: buses } = await this.$axios.post("/bus/all");
@@ -240,22 +232,40 @@ export default {
     async fetchAsientos() {
       const { data: asientos } = await this.$axios.post("/asiento/all");
       this.asientos = asientos;
-    },
-    async fetchHorarios() {
-      const { data: horarios } = await this.$axios.post("/horario/all");
-
-      this.horarios = horarios.filter(
-        h => h.id_trayecto === this.form.id_trayecto
-      );
     }
   },
   components: { BusSeat, TrayectoCard, BookingBusListItem },
   computed: {
+    horariosTrayecto() {
+      return this.$store.state.horarios.list.filter(
+        h => h.id_trayecto === this.form.id_trayecto
+      );
+    },
+    trayectos() {
+      return this.$store.state.trayectos.list;
+    },
+    choosedTrayecto() {
+      return this.$store.state.trayectos.list.find(
+        t => t.id === this.form.id_trayecto
+      );
+    },
+    asientos() {
+      return this.$store.state.asientos.list;
+    },
+    buses() {
+      return this.$store.state.buses.list;
+    },
+    horarios() {
+      return this.$store.state.horarios.list;
+    },
+    pasajeros() {
+      return this.$store.state.pasajeros.list;
+    },
     canSubmit() {
       return Object.keys(this.form).every(f => this.form[f] !== "");
     },
     itExistASeatForPassanger() {
-      return this.asientos.some(
+      return this.$store.state.asientos.list.some(
         a =>
           a.id_bus === this.form.id_bus &&
           a.id_pasajero === this.form.id_pasajero

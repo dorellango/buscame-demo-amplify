@@ -37,7 +37,7 @@ export default {
   methods: {
     async destroy(asiento) {
       try {
-        await this.$axios.delete(`/asiento/${id}`);
+        await this.$axios.delete(`/asiento/${asiento.id}`);
         this.$store.commit("asientos/remove", asiento);
         this.$vToastify.info(
           "Asiento/reservación eliminado exitósamente 😢",

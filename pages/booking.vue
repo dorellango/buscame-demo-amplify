@@ -51,7 +51,7 @@
               v-for="trayecto in trayectos"
               :key="trayecto.id"
               :value="trayecto.id"
-              v-text="`${trayecto.terminal}`"
+              v-text="`${trayecto.ida}-${trayecto.vuelta}`"
             ></option>
           </select>
           <!-- Trayecto -->

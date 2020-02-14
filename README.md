@@ -9,7 +9,7 @@ https://master.d1t5qpr8h0pili.amplifyapp.com/
 El deployment de la aplicación fue realizado traves de Amplify (AWS), el cual
 se conecta directamente a este repositorio (master) y escucha por cambios para proceder a la etapa de build con los comandos tipicos de NuxtJs como SPA (npm run build).
 
-## Estado
+## About
 
 "Bus.co", que es el nombre de fantasía de esta SPA, permite la administración de viejes del lado del operador. Existen pestañas para la visualización de Trayectos, Buses, Pasajeros, Asientos, Choferes y una de "Booking" para la asignación de pasajeros a sus respectivos buses y un número limitado de asientos (10).
 

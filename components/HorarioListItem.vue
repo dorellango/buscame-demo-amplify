@@ -3,7 +3,7 @@
     <div
       class="flex-1 font-mono text-lg text-center text-gray-500 rounded rounded-r-none border border-r-0 h-12 px-3 flex items-center justify-between"
     >
-      <p v-text="`${horario.fecha} ${horario.hora}`"></p>
+      <p v-text="`${horario.hora}`"></p>
       <div class="ml-2 flex items-center">
         <p v-text="busPatente"></p>
         <svg

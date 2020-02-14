@@ -17,24 +17,24 @@
       <form @submit.prevent="add">
         <div class="flex items-center mb-2">
           <div
-            class="flex-1 font-mono text-lg text-center text-gray-500 rounded rounded-r-none border border-r-0 h-12 px-3 flex items-center justify-between"
+            class="md:flex block items-center justify-between flex-1 font-mono text-lg text-center text-gray-500 rounded rounded-r-none border md:border-r-0 md:h-12 md:py-0 py-4 px-3"
           >
-            <div class="flex items-center justify-center">
-              <p class="mr-2 border-b border-indigo-200">
+            <div class="flex items-center justify-center md:mb-0 mb-4">
+              <p class="md:mr-2 mr-auto">
                 {{ parseDate(datepicker) }}
               </p>
               <input-time
                 v-model="form.hora"
-                classes="focus:outline-none border-b border-indigo-200 text-indigo-400 w-12 pb-0 text-center appeareance-none"
+                classes="focus:outline-none border-b border-indigo-200 w-12 pb-0 text-center appeareance-none"
               ></input-time>
             </div>
-            <div class="ml-2 flex items-center">
+            <div class="md:ml-2 ml-0 flex items-center">
               <select
                 v-model="form.id_bus"
-                class="appearance-none bg-white text-indigo-400 block w-full focus:outline-none border-b border-indigo-200 rounded-none"
+                class="appearance-none bg-white text-indigo-400 block w-full text-center focus:outline-none border-b border-indigo-200 rounded-none"
                 name="id_bus"
               >
-                <option value="" disabled>-- --</option>
+                <option value="" disabled>Patente</option>
                 <option
                   v-for="bus in buses"
                   :key="bus.id"
@@ -55,11 +55,19 @@
                 />
               </svg>
             </div>
+            <!-- Button Mobile -->
+            <button
+              :class="form.hora !== '' ? '' : 'pointer-events-none opacity-50'"
+              type="submit"
+              class="px-3 py-2 mt-4 w-full focus:outline-none bg-indigo-700 text-indigo-100 rounded block flex items-center justify-center hover:bg-indigo-400 md:hidden block"
+            >
+              Agregar
+            </button>
           </div>
           <button
             :class="form.hora !== '' ? '' : 'pointer-events-none opacity-50'"
             type="submit"
-            class="h-12 w-10 focus:outline-none bg-indigo-700 text-indigo-100 rounded-r block flex items-center justify-center hover:bg-indigo-400"
+            class="h-12 w-10 focus:outline-none bg-indigo-700 text-indigo-100 rounded-r block flex items-center justify-center hover:bg-indigo-400 md:block hidden"
           >
             <svg
               class="fill-current h-6 w-6 inline-block"
@@ -77,15 +85,29 @@
         </div>
       </form>
       <!-- Horarios List -->
-      <transition-group name="fade" tag="div">
-        <horario-list-item
-          v-for="horario in horariosByDate"
-          :key="horario.id"
-          :horario="horario"
-          :buses="buses"
-          @destroy="destroy"
-        ></horario-list-item>
-      </transition-group>
+      <div class="pt-6 border-t border-dashed mt-4 border-gray-400">
+        <p
+          v-if="horariosByDate.length !== 0"
+          class="mb-4 tracking-wide text-gray-600 text-center"
+        >
+          Salidas <strong>{{ parseDate(datepicker) }}</strong> [{{
+            horariosByDate.length
+          }}]
+        </p>
+        <p v-else class="mb-4 tracking-wide text-gray-600 text-center">
+          Sin salidas para el
+          <strong>{{ parseDate(datepicker) }}</strong>
+        </p>
+        <transition-group name="fade" tag="div">
+          <horario-list-item
+            v-for="horario in horariosByDate"
+            :key="horario.id"
+            :horario="horario"
+            :buses="buses"
+            @destroy="destroy"
+          ></horario-list-item>
+        </transition-group>
+      </div>
     </div>
     <div class="p-4 bg-gray-200 flex">
       <button type="button" class="btn-default" @click="hide()">

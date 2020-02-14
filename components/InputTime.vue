@@ -2,7 +2,7 @@
   <div class="flex items-center justify-center">
     <!-- Hour -->
     <input
-      :class="[isValid ? 'bg-green-200 ' : 'bg-gray-200', classes]"
+      :class="[isValid ? 'text-green-500 ' : 'text-red-300', classes]"
       @input="updated"
       v-model="hour"
       name="hour"
@@ -13,7 +13,7 @@
     <span>:</span>
     <!-- Minute -->
     <input
-      :class="[isValid ? 'bg-green-200 ' : 'bg-gray-200', classes]"
+      :class="[isValid ? 'text-green-500 ' : 'text-red-300', classes]"
       @input="updated"
       v-model="minute"
       name="minute"
@@ -24,7 +24,7 @@
     <!-- Seconds -->
     <span>:</span>
     <input
-      :class="[isValid ? 'bg-green-200 ' : 'bg-gray-200', classes]"
+      :class="[isValid ? 'text-green-500 ' : 'text-red-300', classes]"
       @input="updated"
       v-model="seconds"
       name="seconds"

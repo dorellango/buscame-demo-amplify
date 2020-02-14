@@ -119,11 +119,12 @@
           Selecciona el <strong class="ml-1"> asiento</strong>
         </h3>
         <p
-          v-show="itExistASeatForPassanger"
+          v-if="itExistASeatForPassanger"
           class="mt-2 bg-yellow-200 border border-dashed border-yellow-300 border-yellow-500 font-bold mb-4 p-4 rounded text-center text-yellow-700 tracking-wider"
         >
           Ya existe un asiento reservado para este pasajero en el trayecto
-          seleccionado
+          seleccionado -
+          <strong>Nº {{ existingSeatForPassanger["num_asiento"] }}</strong>
         </p>
         <div
           :class="
@@ -271,6 +272,13 @@ export default {
     },
     canSubmit() {
       return Object.keys(this.form).every(f => this.form[f] !== "");
+    },
+    existingSeatForPassanger() {
+      return this.$store.state.asientos.list.find(
+        a =>
+          a.id_bus === this.form.id_bus &&
+          a.id_pasajero === this.form.id_pasajero
+      );
     },
     itExistASeatForPassanger() {
       return this.$store.state.asientos.list.some(

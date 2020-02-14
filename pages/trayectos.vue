@@ -52,6 +52,12 @@ export default {
   },
   methods: {
     async destroy(trayecto) {
+      if (this.isThereAnSchedule(trayecto.id)) {
+        return this.$vToastify.warning(
+          "Existe un horario asociado a este trayecto",
+          "Imposible!"
+        );
+      }
       try {
         await this.$axios.delete(`/trayecto/${trayecto.id}`);
         this.$store.commit("trayectos/remove", trayecto);
@@ -59,6 +65,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    isThereAnSchedule(id) {
+      return this.$store.state.horarios.list.some(h => h.id_trayecto === id);
     }
   },
   components: { TrayectoCard, ModalHorarios, ModalAddTrayecto },

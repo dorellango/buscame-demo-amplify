@@ -7,6 +7,7 @@
     <div class="px-4 py-6">
       <v-date-picker
         v-model="datepicker"
+        :min-date="new Date()"
         :attributes="schedulesCalendarTrayectos"
         is-inline
         is-expanded
@@ -57,7 +58,11 @@
             </div>
             <!-- Button Mobile -->
             <button
-              :class="form.hora !== '' ? '' : 'pointer-events-none opacity-50'"
+              :class="
+                form.hora !== '' && form.id_bus !== ''
+                  ? ''
+                  : 'pointer-events-none opacity-50'
+              "
               type="submit"
               class="px-3 py-2 mt-4 w-full focus:outline-none bg-indigo-700 text-indigo-100 rounded block flex items-center justify-center hover:bg-indigo-400 md:hidden block"
             >
@@ -65,7 +70,11 @@
             </button>
           </div>
           <button
-            :class="form.hora !== '' ? '' : 'pointer-events-none opacity-50'"
+            :class="
+              form.hora !== '' && form.id_bus !== ''
+                ? ''
+                : 'pointer-events-none opacity-50'
+            "
             type="submit"
             class="h-12 w-10 focus:outline-none bg-indigo-700 text-indigo-100 rounded-r block flex items-center justify-center hover:bg-indigo-400 md:block hidden"
           >
@@ -126,7 +135,6 @@ export default {
   data() {
     return {
       datepicker: new Date(),
-      isValidTime: false,
       form: {
         fecha: "",
         hora: "",

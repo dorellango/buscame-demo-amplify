@@ -69,16 +69,9 @@
             class="hidden md:block btn-indigo w-full focus:outline-none"
             :class="canSubmit ? '' : 'opacity-25 pointer-events-none'"
           >
-            Book
+            Reservar
           </button>
         </div>
-        <p
-          v-show="itExistASeatForPassanger"
-          class="mt-2 bg-yellow-200 border border-dashed border-yellow-300 border-yellow-500 flex font-bold items-center justify-center mb-4 p-4 rounded text-center text-yellow-700 tracking-wider"
-        >
-          Ya existe un asiento reservado para este pasajero en el trayecto
-          seleccionado
-        </p>
       </div>
       <div class="w-full md:w-1/3 px-2 mb-16">
         <!-- Buses -->
@@ -101,10 +94,17 @@
         ></booking-bus-list-item>
         <p
           v-show="horariosTrayecto.length === 0 && this.form.id_trayecto"
-          class="bg-yellow-200 border border-dashed border-yellow-300 border-yellow-500 flex font-bold items-center justify-center mb-4 p-4 rounded text-center text-yellow-700 tracking-wider"
+          class="bg-yellow-200 border border-dashed border-yellow-300 border-yellow-500 font-bold mb-4 p-4 rounded text-center text-yellow-700 tracking-wider"
         >
-          No hay buses asignados para este trayecto
+          No hay buses asignados para este trayecto.
+          <a
+            href.prevent="#"
+            @click="$refs.modalHorarios.show(choosedTrayecto)"
+            class="underline text-indigo-700 cursor-pointer"
+            >Asignar uno</a
+          >
         </p>
+        <modal-horarios ref="modalHorarios"></modal-horarios>
       </div>
       <div class="w-full md:w-1/3 px-2 mb-16">
         <!-- Asientos -->
@@ -118,6 +118,13 @@
           </p>
           Selecciona el <strong class="ml-1"> asiento</strong>
         </h3>
+        <p
+          v-show="itExistASeatForPassanger"
+          class="mt-2 bg-yellow-200 border border-dashed border-yellow-300 border-yellow-500 font-bold mb-4 p-4 rounded text-center text-yellow-700 tracking-wider"
+        >
+          Ya existe un asiento reservado para este pasajero en el trayecto
+          seleccionado
+        </p>
         <div
           :class="
             form.id_bus === '' || itExistASeatForPassanger
@@ -161,7 +168,7 @@
             class="md:hidden btn-indigo w-full focus:outline-none mt-4 pt-4"
             :class="canSubmit ? '' : 'opacity-25 pointer-events-none'"
           >
-            Book
+            Reservar
           </button>
         </div>
       </div>
@@ -174,6 +181,7 @@ import BusSeat from "~/components/BusSeat";
 import TrayectoCard from "~/components/TrayectoCard";
 import BookingBusListItem from "~/components/BookingBusListItem";
 import { isSameDay } from "date-fns";
+import ModalHorarios from "~/components/ModalHorarios";
 
 export default {
   data() {
@@ -204,7 +212,7 @@ export default {
   },
   methods: {
     updateBus(id) {
-      this.form.id_bus = id;
+      this.form.id_bus = this.form.id_bus === id ? "" : id;
     },
     busSeatpicked(seat) {
       this.form.num_asiento = seat;
@@ -234,7 +242,7 @@ export default {
       this.asientos = asientos;
     }
   },
-  components: { BusSeat, TrayectoCard, BookingBusListItem },
+  components: { BusSeat, ModalHorarios, TrayectoCard, BookingBusListItem },
   computed: {
     horariosTrayecto() {
       return this.$store.state.horarios.list.filter(

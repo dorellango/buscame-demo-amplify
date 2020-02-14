@@ -57,11 +57,10 @@ export default {
   props: ["asiento"],
   computed: {
     bus() {
-      this.$store.buses.list.find(b => b.id === asiento.id_bus);
+      return this.$store.state.buses.list.find(
+        b => b.id === this.asiento.id_bus
+      );
     }
   }
 };
 </script>
-
-<style>
-</style>

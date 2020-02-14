@@ -1,5 +1,5 @@
 <template>
-  <div class="sans-serif bg-gray-100 h-screen">
+  <div class="sans-serif bg-gray-100 min-h-screen">
     <Nav />
     <div class="container mx-auto px-4">
       <nuxt />

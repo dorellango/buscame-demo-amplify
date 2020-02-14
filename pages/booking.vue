@@ -22,19 +22,31 @@
             for="id_pasajero"
             >pasajero</label
           >
-          <select
-            v-model="form.id_pasajero"
-            class="mb-2 appearance-none bg-gray-200 border-2 border-gray-200 rounded px-4 py-1 text-gray-700 block w-full focus:outline-none focus:border-indigo-600"
-            name="id_pasajero"
-          >
-            <option value="" disabled>-- --</option>
-            <option
-              v-for="pasajero in pasajeros"
-              :key="pasajero.id"
-              :value="pasajero.id"
-              v-text="`${pasajero.nombre} ${pasajero.apellido}`"
-            ></option>
-          </select>
+          <div class="mb-2 flex items-center">
+            <select
+              v-model="form.id_pasajero"
+              class="appearance-none bg-gray-200 border-2 border-gray-200 rounded rounded-r-none px-4 py-1 text-gray-700 block w-full focus:outline-none focus:border-indigo-600"
+              name="id_pasajero"
+            >
+              <option value="" disabled>-- --</option>
+              <option
+                v-for="pasajero in pasajeros"
+                :key="pasajero.id"
+                :value="pasajero.id"
+                v-text="`${pasajero.nombre} ${pasajero.apellido}`"
+              ></option>
+            </select>
+            <!-- Add Pasajero -->
+            <button
+              type="button"
+              @click="$modal.show('pasajero-add')"
+              class="text-lg px-4 py-1 w-10 focus:outline-none bg-indigo-700 text-indigo-100 rounded-r block flex items-center justify-center hover:bg-indigo-400"
+            >
+              &plus;
+            </button>
+
+            <modal-add-pasajero></modal-add-pasajero>
+          </div>
           <!-- Trayecto Select-->
           <label
             class="uppercase text-xs text-gray-700 font-bold mb-1"
@@ -119,11 +131,12 @@
           Selecciona el <strong class="ml-1"> asiento</strong>
         </h3>
         <p
-          v-show="itExistASeatForPassanger"
+          v-if="itExistASeatForPassanger"
           class="mt-2 bg-yellow-200 border border-dashed border-yellow-300 border-yellow-500 font-bold mb-4 p-4 rounded text-center text-yellow-700 tracking-wider"
         >
           Ya existe un asiento reservado para este pasajero en el trayecto
-          seleccionado
+          seleccionado -
+          <strong>Nº {{ existingSeatForPassanger["num_asiento"] }}</strong>
         </p>
         <div
           :class="
@@ -182,6 +195,7 @@ import TrayectoCard from "~/components/TrayectoCard";
 import BookingBusListItem from "~/components/BookingBusListItem";
 import { isSameDay } from "date-fns";
 import ModalHorarios from "~/components/ModalHorarios";
+import ModalAddPasajero from "~/components/ModalAddPasajero";
 
 export default {
   data() {
@@ -242,7 +256,13 @@ export default {
       this.asientos = asientos;
     }
   },
-  components: { BusSeat, ModalHorarios, TrayectoCard, BookingBusListItem },
+  components: {
+    BusSeat,
+    ModalAddPasajero,
+    ModalHorarios,
+    TrayectoCard,
+    BookingBusListItem
+  },
   computed: {
     horariosTrayecto() {
       return this.$store.state.horarios.list.filter(
@@ -271,6 +291,13 @@ export default {
     },
     canSubmit() {
       return Object.keys(this.form).every(f => this.form[f] !== "");
+    },
+    existingSeatForPassanger() {
+      return this.$store.state.asientos.list.find(
+        a =>
+          a.id_bus === this.form.id_bus &&
+          a.id_pasajero === this.form.id_pasajero
+      );
     },
     itExistASeatForPassanger() {
       return this.$store.state.asientos.list.some(

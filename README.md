@@ -18,7 +18,7 @@ se conecta directamente a este repositorio (master) y escucha por cambios para p
 
 ## About
 
-"Bus.co", que es el nombre de fantasía de esta SPA, permite la administración de viejes del lado del operador. Existen pestañas para la visualización de Trayectos, Buses, Pasajeros, Asientos, Choferes y una de "Booking" para la asignación de pasajeros a sus respectivos buses y un número limitado de asientos (10).
+"Bus.co", que es el nombre de fantasía de esta SPA, permite la administración de vijes del lado del operador. Existen pestañas para la visualización de Trayectos, Buses, Pasajeros, Asientos, Choferes y una de "Booking" para la asignación de pasajeros a sus respectivos buses y un número limitado de asientos (10).
 
 Existen restricciónes para el ingreso de cada modelo, así también como la asignación de relaciones, por ej. la de un solo bus por trayecto, o un asiento por pasajero entre otras.
 

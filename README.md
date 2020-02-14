@@ -2,12 +2,19 @@
 
 SPA para el consumo de la API test de destacame. Desarrollada en nuxtjs como framework junto a vuejs.
 
+#### URL Amplify
 https://master.d1t5qpr8h0pili.amplifyapp.com/
+
+#### URL Netlify
+
+https://dreamy-minsky-dc96ce.netlify.com/
 
 ## Deployment
 
 El deployment de la aplicación fue realizado traves de Amplify (AWS), el cual
 se conecta directamente a este repositorio (master) y escucha por cambios para proceder a la etapa de build con los comandos tipicos de NuxtJs como SPA (npm run build).
+
+> Como variante también se utilizó Netlify.
 
 ## About
 
@@ -23,7 +30,7 @@ El uso de Amplify Framework nos abriría la posibilidad de permitir el registro 
 
 Otra potencial mejora sería el uso de Lambda Edge y forzar la entrega de contenido estático para motores de busqueda. Articulo relacionado https://medium.com/@dilanthaprasanjith/solving-spa-meta-problems-with-the-power-of-lambda-edge-cdc8773e23cc
 
-## Estilos
+## CSS Utility-first
 
 Para los estilos se ha utilizado Tailwind https://tailwindcss.com/ como framework utility-first, pero para motivos de esta demo también se han declarado algunas clases en SASS que extienden del framework bajo la directiva @apply. Ver layout default.vue
 
